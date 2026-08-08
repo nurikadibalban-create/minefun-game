@@ -1,4 +1,4 @@
-/* إعادة ضبط الصفحات والخطوط الأساسية */
+/* إعادة ضبط الشاشة والأساسيات */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,7 +14,7 @@ body, html {
   -webkit-user-select: none;
 }
 
-/* القائمة الرئيسية (Lobby) */
+/* القائمة الرئيسية (Lobby Screen) */
 #menu-overlay {
   position: absolute;
   top: 0;
@@ -31,17 +31,17 @@ body, html {
   color: #ffffff;
 }
 
-/* عنوان اللعبة الرئيسي */
+/* عنوان اللوبي */
 .title {
   font-size: 42px;
   font-weight: 900;
   color: #38bdf8;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
   margin-bottom: 20px;
   letter-spacing: 2px;
 }
 
-/* صندوق خيارات اللعبة */
+/* بطاقة الدخول */
 .menu-box {
   background: rgba(30, 41, 59, 0.95);
   border: 2px solid #334155;
@@ -52,7 +52,7 @@ body, html {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* حقل كتابة اسم المستخدم */
+/* حقل إدخال الاسم */
 input[type="text"] {
   width: 100%;
   padding: 10px 14px;
@@ -72,38 +72,7 @@ input[type="text"]:focus {
   border-color: #38bdf8;
 }
 
-/* أزرار اختيار المودات (BedWars / SkyWars / Parkour) */
-.mode-select {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 18px;
-  justify-content: center;
-}
-
-.mode-btn {
-  flex: 1;
-  padding: 10px 6px;
-  background: #334155;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  color: #ffffff;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 13px;
-  transition: all 0.2s ease;
-}
-
-.mode-btn:hover {
-  background: #475569;
-}
-
-.mode-btn.active {
-  border-color: #38bdf8;
-  background: #0284c7;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-}
-
-/* زر دخول اللعبة */
+/* زر الدخول */
 .play-btn {
   width: 100%;
   padding: 12px;
@@ -126,7 +95,7 @@ input[type="text"]:focus {
   transform: scale(0.98);
 }
 
-/* عناصر الواجهة أثناء اللعب (HUD) */
+/* عناصر الواجهة داخل اللوبي (HUD) */
 #crosshair {
   position: absolute;
   top: 50%;
@@ -142,13 +111,13 @@ input[type="text"]:focus {
   display: none;
 }
 
-#game-info {
+#lobby-ui {
   position: absolute;
   top: 15px;
   right: 15px;
   background: rgba(0, 0, 0, 0.75);
   color: #ffffff;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-radius: 8px;
   font-weight: bold;
   font-size: 14px;
