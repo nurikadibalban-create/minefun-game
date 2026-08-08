@@ -40,7 +40,7 @@
     .popular-badge { background: #ff4757; color: white; }
     .updated-badge { background: #2ed573; color: white; }
 
-    /* SVG Graphical Backgrounds */
+    /* SVG Backgrounds */
     .g-infection { background: #1dd1a1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%2310ac84" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="9" cy="9" r="2" fill="%23000"/><circle cx="15" cy="9" r="2" fill="%23000"/><path fill="%23000" d="M12 14c-2 0-3 1-3 2h6c0-1-1-2-3-2z"/></svg>') no-repeat center 20%; }
     .g-parkour { background: #ff6b6b url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23ee5253" d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg>') no-repeat center 20%; }
     .g-creative { background: #a29bfe url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%236c5ce7" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>') no-repeat center 20%; }
@@ -55,10 +55,9 @@
     .g-dressup { background: #ff7979 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23badc58" d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>') no-repeat center 20%; }
     .g-gardengrow { background: #6ab04c url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%232ed573" d="M12 3E6 3 3 10.5 3 15 12 15s9-4.5 9-12c-7.5 0-12 4.5-12 9zM12 15v6"/></svg>') no-repeat center 20%; }
 
-    /* Match Gameplay Screen Overlay (In-Game HUD Exact Match) */
+    /* Match Gameplay Screen Overlay (In-Game HUD) */
     #game-screen { display: none; position: fixed; inset: 0; z-index: 9999; background: #68cbf8; }
     
-    /* Center Timer */
     .game-timer-box { 
       position: absolute; top: 18px; left: 50%; transform: translateX(-50%); 
       background: rgba(0, 0, 0, 0.82); color: #fff; font-weight: 900; 
@@ -66,14 +65,12 @@
       z-index: 10000; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    /* Top Left Enter Button */
     .btn-enter-hud {
       position: absolute; top: 18px; left: 18px; background: rgba(0,0,0,0.7);
       color: #fff; border: 2px solid #a46b32; padding: 4px 12px; font-weight: 900;
       border-radius: 5px; cursor: pointer; font-size: 12px; z-index: 10000;
     }
 
-    /* Top Right Buttons (Shop, ESC, Camera, Emote) */
     .top-right-hud { position: absolute; top: 18px; right: 18px; display: flex; flex-direction: column; gap: 8px; z-index: 10000; align-items: flex-end; }
     .hud-icon-btn { 
       background: rgba(0, 0, 0, 0.65); border: 2px solid rgba(255,255,255,0.2); 
@@ -82,20 +79,17 @@
     }
     .hud-icon-btn:hover { background: rgba(0, 0, 0, 0.85); border-color: #fff; }
 
-    /* Crosshair */
     .crosshair { 
       position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; 
       border: 2px solid #000; background: rgba(255,255,255,0.8); border-radius: 50%; 
       transform: translate(-50%, -50%); z-index: 10000; pointer-events: none; 
     }
 
-    /* Bottom HUD Container (Hearts, Hunger, Hotbar) */
     .bottom-hud { 
       position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); 
       display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 10000; 
     }
 
-    /* Hearts and Hunger */
     .status-bars { display: flex; gap: 20px; align-items: center; margin-bottom: 2px; }
     .hearts-row { display: flex; gap: 3px; }
     .heart { width: 14px; height: 14px; background: #ff2a2a; transform: rotate(-45deg); display: inline-block; position: relative; }
@@ -108,7 +102,6 @@
     .hunger-bar-fill { width: 100%; height: 100%; background: #2ecc71; }
     .hunger-text { font-size: 9px; font-weight: 900; color: #fff; text-shadow: 1px 1px #000; }
 
-    /* Inventory Hotbar */
     .hotbar { 
       display: flex; background: #8b5a2b; border: 4px solid #5a3818; 
       border-radius: 6px; padding: 3px; gap: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.6); 
@@ -161,7 +154,7 @@
     </div>
   </div>
 
-  <!-- Full Match Gameplay Screen (3D BedWars Floating Map + HUD) -->
+  <!-- In-Game Match Overlay -->
   <div id="game-screen">
     <button class="btn-enter-hud">ENTER</button>
     <div class="game-timer-box" id="timer-text">TIME TO START THE GAME 15s</div>
@@ -205,7 +198,6 @@
   </div>
 
   <script>
-    // --- 1. Lobby Texture & Player Model ---
     function createFaceTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 64; canvas.height = 64;
@@ -257,7 +249,7 @@
       return group;
     }
 
-    // --- 2. Main Lobby Preview Render ---
+    /* Lobby Render */
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x60a5fa);
@@ -293,7 +285,7 @@
     }
     renderLobby();
 
-    // --- 3. BedWars 3D Map Construction (Match Mode) ---
+    /* Match 3D Map & Camera System */
     let activeScene, activeCamera, activeRenderer, animId, timerInterval, countdown = 15;
 
     function buildBedWarsMap(scene) {
@@ -302,7 +294,6 @@
       const woodMat = new THREE.MeshLambertMaterial({ color: 0xcd8452 });
       const leafMat = new THREE.MeshLambertMaterial({ color: 0x44bd32 });
 
-      // Create Floating Island
       function createFloatingIsland(x, y, z, width, depth, colorHex) {
         const group = new THREE.Group();
         group.position.set(x, y, z);
@@ -314,20 +305,17 @@
         bottomBase.position.y = -2;
         group.add(bottomBase);
 
-        // Team Colored Big Cube Block / House
         if (colorHex) {
           const cubeMat = new THREE.MeshLambertMaterial({ color: colorHex });
           const houseCube = new THREE.Mesh(new THREE.BoxGeometry(6, 6, 6), cubeMat);
           houseCube.position.set(0, 3.75, 0);
           group.add(houseCube);
 
-          // Roof detail
           const innerDetail = new THREE.Mesh(new THREE.BoxGeometry(4, 2, 4), new THREE.MeshLambertMaterial({ color: 0xffffff }));
           innerDetail.position.set(0, 7.5, 0);
           group.add(innerDetail);
         }
 
-        // Tree
         const trunk = new THREE.Mesh(new THREE.BoxGeometry(0.8, 3, 0.8), woodMat);
         trunk.position.set(width/3, 2.2, depth/3);
         group.add(trunk);
@@ -339,14 +327,12 @@
         scene.add(group);
       }
 
-      // Center Islands
       createFloatingIsland(0, 0, 0, 10, 10, null);
       createFloatingIsland(0, 0, -18, 8, 8, null);
       createFloatingIsland(0, 0, 18, 8, 8, null);
       createFloatingIsland(-18, 0, 0, 8, 8, null);
       createFloatingIsland(18, 0, 0, 8, 8, null);
 
-      // 8 Outer Team Islands radially (Red, Blue, Green, Yellow, Purple, Cyan, White, Orange)
       const teamColors = [0xff4757, 0x2e86de, 0x2ed573, 0xffa502, 0x9b59b6, 0x00d2d3, 0xffffff, 0xff6b81];
       const radius = 45;
 
@@ -367,7 +353,7 @@
       view.innerHTML = '';
 
       activeScene = new THREE.Scene();
-      activeScene.background = new THREE.Color(0x68cbf8); // Bright Sky Blue from screenshot
+      activeScene.background = new THREE.Color(0x68cbf8);
 
       activeCamera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
       activeRenderer = new THREE.WebGLRenderer({ antialias: true });
@@ -379,10 +365,9 @@
       sun.position.set(30, 60, 20);
       activeScene.add(sun);
 
-      // Build 3D BedWars Map
       buildBedWarsMap(activeScene);
 
-      // First-person hand visible in camera view
+      // Hand representation in right corner
       const handMat = new THREE.MeshLambertMaterial({ color: 0xc68b59 });
       const sleeveMat = new THREE.MeshLambertMaterial({ color: 0x00a8a8 });
       const handGroup = new THREE.Group();
@@ -399,11 +384,9 @@
       activeCamera.add(handGroup);
       activeScene.add(activeCamera);
 
-      // Camera high top perspective angle overlooking the floating map (exactly as in the screenshot)
       activeCamera.position.set(0, 42, 50);
       activeCamera.lookAt(0, -5, 0);
 
-      // Timer Countdown
       countdown = 15;
       clearInterval(timerInterval);
       timerInterval = setInterval(() => {
@@ -428,7 +411,6 @@
 
     function runMatchLoop() {
       animId = requestAnimationFrame(runMatchLoop);
-      // Slow camera orbit movement around the Bedwars map preview
       const time = Date.now() * 0.0003;
       activeCamera.position.x = Math.sin(time) * 55;
       activeCamera.position.z = Math.cos(time) * 55;
