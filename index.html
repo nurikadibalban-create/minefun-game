@@ -9,39 +9,30 @@
 </head>
 <body>
 
-  <!-- 1. الشريط العلوي Header -->
   <header class="top-bar">
     <div class="profile-container">
       <div class="profile-card">
         <div class="avatar-icon"></div>
         <span class="username" id="display-name">NURIPLAYZ</span>
       </div>
-      
       <div class="sub-profile-btns">
-        <div class="wheel-btn" title="Lucky Wheel">🎡</div>
-        <div class="gift-btn" title="Free Reward">🎁 <span class="badge-free">FREE</span></div>
+        <div class="wheel-btn">🎡</div>
+        <div class="gift-btn">🎁 <span class="badge-free">FREE</span></div>
         <button class="friends-btn">👥 FRIENDS</button>
       </div>
     </div>
-
     <div class="logo">MINEFUN<span>.io</span></div>
-
     <div class="top-menu">
-      <button class="icon-btn download-btn">📥</button>
+      <button class="icon-btn">📥</button>
       <button class="nav-btn shop-btn">🛒 SHOP</button>
       <button class="nav-btn pets-btn">🐾 PETS</button>
       <button class="icon-btn">⚙️</button>
     </div>
   </header>
 
-  <!-- 2. التقسيم الرئيسي Main Layout -->
   <div class="main-container">
-    
-    <!-- الجانب الأيسر: عرض السكن بـ 3D + الإعلان -->
     <div class="viewport-section" id="canvas-container">
       <div class="player-nametag">NURIPLAYZ</div>
-
-      <!-- بنر الإعلان الجانبي -->
       <div class="ad-banner">
         <div class="ad-header">Acrobat Bunu Başardı.</div>
         <div class="ad-body">
@@ -52,96 +43,31 @@
       </div>
     </div>
 
-    <!-- الجانب الأيمن: بطاقات الألعاب -->
     <div class="games-section">
       <div class="games-grid">
-        
-        <div class="game-card popular">
-          <span class="badge popular-badge">POPULAR</span>
-          <div class="card-title">INFECTION</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">PARKOUR</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">CREATIVE</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">HIDE AND SEEK</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">THE WAR</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">SKY WARS</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">ONE BLOCK</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">BED WARS</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">SANDBOX</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">RAID</div>
-        </div>
-
-        <div class="game-card updated">
-          <span class="badge updated-badge">UPDATED</span>
-          <div class="card-title">STEAL A PET</div>
-        </div>
-
-        <div class="game-card">
-          <div class="card-title">DRESS UP</div>
-        </div>
-
+        <div class="game-card popular"><span class="badge popular-badge">POPULAR</span><div class="card-title">INFECTION</div></div>
+        <div class="game-card"><div class="card-title">PARKOUR</div></div>
+        <div class="game-card"><div class="card-title">CREATIVE</div></div>
+        <div class="game-card"><div class="card-title">HIDE AND SEEK</div></div>
+        <div class="game-card"><div class="card-title">THE WAR</div></div>
+        <div class="game-card"><div class="card-title">SKY WARS</div></div>
+        <div class="game-card"><div class="card-title">ONE BLOCK</div></div>
+        <div class="game-card"><div class="card-title">BED WARS</div></div>
+        <div class="game-card"><div class="card-title">SANDBOX</div></div>
+        <div class="game-card"><div class="card-title">RAID</div></div>
+        <div class="game-card updated"><span class="badge updated-badge">UPDATED</span><div class="card-title">STEAL A PET</div></div>
+        <div class="game-card"><div class="card-title">DRESS UP</div></div>
         <div class="custom-games-box">
           <div class="custom-title">CUSTOM GAMES</div>
-          <div class="custom-icons">
-            <span class="c-icon">🎮</span>
-            <span class="c-icon">🎲</span>
-            <span class="c-icon">⚔️</span>
-          </div>
+          <div class="custom-icons">🎮 🎲 ⚔️</div>
         </div>
-
-        <div class="game-card updated">
-          <span class="badge updated-badge">UPDATED</span>
-          <div class="card-title">GARDEN GROW</div>
-        </div>
-
-        <div class="game-card coming-soon">
-          <div class="card-title">COMING SOON</div>
-        </div>
-
-        <div class="game-card coming-soon">
-          <div class="card-title">COMING SOON</div>
-        </div>
-
-      </div>
-
-      <div class="bottom-right-widgets">
-        <button class="discord-btn">👾</button>
-        <div class="free-box">
-          <span class="multiplier">x2</span>
-          <span class="chest-icon">🧰</span>
-          <span class="free-text">FREE</span>
-        </div>
+        <div class="game-card updated"><span class="badge updated-badge">UPDATED</span><div class="card-title">GARDEN GROW</div></div>
+        <div class="game-card coming-soon"><div class="card-title">COMING SOON</div></div>
+        <div class="game-card coming-soon"><div class="card-title">COMING SOON</div></div>
       </div>
     </div>
   </div>
 
-  <!-- Three.js Visualiser -->
   <script>
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
@@ -152,54 +78,35 @@
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    dirLight.position.set(5, 10, 7);
-    scene.add(dirLight);
-
-    // بناء الجزيرة
     const islandGroup = new THREE.Group();
     const grassGeo = new THREE.CylinderGeometry(3, 2.5, 0.8, 8);
-    const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
-    const grass = new THREE.Mesh(grassGeo, grassMat);
-    islandGroup.add(grass);
+    const grassMat = new THREE.MeshBasicMaterial({ color: 0x557a2b });
+    islandGroup.add(new THREE.Mesh(grassGeo, grassMat));
 
     const dirtGeo = new THREE.CylinderGeometry(2.5, 0.5, 2.5, 8);
-    const dirtMat = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
+    const dirtMat = new THREE.MeshBasicMaterial({ color: 0x8b5a2b });
     const dirt = new THREE.Mesh(dirtGeo, dirtMat);
     dirt.position.y = -1.55;
     islandGroup.add(dirt);
 
-    // تحميل السكن برابط مباشر يضمن عدم الاختفاء
-    const textureLoader = new THREE.TextureLoader();
-    const skinUrl = 'https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.12.2/assets/minecraft/textures/entity/steve.png';
-    
-    const skinTexture = textureLoader.load(skinUrl, () => {
-      skinTexture.magFilter = THREE.NearestFilter;
-      skinTexture.minFilter = THREE.NearestFilter;
-      skinTexture.needsUpdate = true;
-    });
-
-    const skinMaterial = new THREE.MeshLambertMaterial({
-      map: skinTexture,
-      transparent: true
-    });
-
-    function createSkinBlock(width, height, depth, u, v) {
-      const geometry = new THREE.BoxGeometry(width, height, depth);
-      const texW = 64, texH = 32;
-      const faces = [
-        [u + depth + width, v + depth, u + depth + width + depth, v + depth + height],
-        [u, v + depth, u + depth, v + depth + height],
-        [u + depth, v, u + depth + width, v + depth],
-        [u + depth + width, v, u + depth + width + width, v + depth],
-        [u + depth, v + depth, u + depth + width, v + depth + height],
-        [u + depth + width + depth, v + depth, u + 2*depth + 2*width, v + depth + height]
-      ];
+    // دالة إنشاء مكعب مع ضبط الـ UV لتوزيع التكستشر بشكل صحيح
+    function createBox(w, h, d, u, v, texture, texW = 64, texH = 64) {
+      const geo = new THREE.BoxGeometry(w, h, d);
+      const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
 
       const uvs = [];
+      const faces = [
+        [u + d + w, v + d, u + d + w + d, v + d + h], // Right
+        [u, v + d, u + d, v + d + h],                 // Left
+        [u + d, v, u + d + w, v + d],                 // Top
+        [u + d + w, v, u + d + w + w, v + d],         // Bottom
+        [u + d, v + d, u + d + w, v + d + h],         // Front
+        [u + d + w + d, v + d, u + 2*d + 2*w, v + d + h] // Back
+      ];
+
       for (let i = 0; i < 6; i++) {
         const [x1, y1, x2, y2] = faces[i];
         uvs.push(
@@ -209,47 +116,58 @@
           x2/texW, 1 - y1/texH
         );
       }
-      
-      geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-      return new THREE.Mesh(geometry, skinMaterial);
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      return new THREE.Mesh(geo, mat);
     }
 
-    const characterGroup = new THREE.Group();
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.setCrossOrigin('anonymous');
 
-    // الرأس
-    const headMesh = createSkinBlock(0.8, 0.8, 0.8, 0, 0);
-    headMesh.position.y = 1.8;
-    characterGroup.add(headMesh);
+    // رابط سكن Steve المباشر كصورة Canvas خفيفة وقابلة للتحميل بدون مشاكل
+    const skinUrl = 'https://mc-heads.net/skin/MHF_Steve';
 
-    // الجذع
-    const bodyMesh = createSkinBlock(0.8, 1.2, 0.4, 16, 16);
-    bodyMesh.position.y = 0.8;
-    characterGroup.add(bodyMesh);
+    textureLoader.load(skinUrl, (texture) => {
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
 
-    // الذراع الأيسر
-    const leftArm = createSkinBlock(0.4, 1.2, 0.4, 40, 16);
-    leftArm.position.set(-0.6, 0.8, 0);
-    characterGroup.add(leftArm);
+      const playerGroup = new THREE.Group();
 
-    // الذراع الأيمن
-    const rightArm = createSkinBlock(0.4, 1.2, 0.4, 40, 16);
-    rightArm.position.set(0.6, 0.8, 0);
-    characterGroup.add(rightArm);
+      // Head
+      const head = createBox(0.8, 0.8, 0.8, 8, 8, texture);
+      head.position.y = 1.8;
+      playerGroup.add(head);
 
-    // الرجل اليسرى
-    const leftLeg = createSkinBlock(0.4, 1.2, 0.4, 0, 16);
-    leftLeg.position.set(-0.2, -0.4, 0);
-    characterGroup.add(leftLeg);
+      // Body
+      const body = createBox(0.8, 1.2, 0.4, 20, 20, texture);
+      body.position.y = 0.8;
+      playerGroup.add(body);
 
-    // الرجل اليمنى
-    const rightLeg = createSkinBlock(0.4, 1.2, 0.4, 0, 16);
-    rightLeg.position.set(0.2, -0.4, 0);
-    characterGroup.add(rightLeg);
+      // Left Arm
+      const leftArm = createBox(0.4, 1.2, 0.4, 44, 20, texture);
+      leftArm.position.set(-0.6, 0.8, 0);
+      playerGroup.add(leftArm);
 
-    islandGroup.add(characterGroup);
+      // Right Arm
+      const rightArm = createBox(0.4, 1.2, 0.4, 44, 20, texture);
+      rightArm.position.set(0.6, 0.8, 0);
+      playerGroup.add(rightArm);
+
+      // Left Leg
+      const leftLeg = createBox(0.4, 1.2, 0.4, 4, 20, texture);
+      leftLeg.position.set(-0.2, -0.4, 0);
+      playerGroup.add(leftLeg);
+
+      // Right Leg
+      const rightLeg = createBox(0.4, 1.2, 0.4, 4, 20, texture);
+      rightLeg.position.set(0.2, -0.4, 0);
+      playerGroup.add(rightLeg);
+
+      islandGroup.add(playerGroup);
+    });
+
     scene.add(islandGroup);
 
-    camera.position.set(0, 2.5, 7);
+    camera.position.set(0, 2, 6);
     camera.lookAt(0, 0.5, 0);
 
     function animate() {
