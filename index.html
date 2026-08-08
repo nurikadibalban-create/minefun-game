@@ -1,71 +1,72 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>MineFun Clone</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MineFun 3D Game</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; user-select: none; }
+    #crosshair {
+      position: absolute; top: 50%; left: 50%;
+      width: 10px; height: 10px;
+      border: 2px solid white; border-radius: 50%;
+      transform: translate(-50%, -50%); pointer-events: none; z-index: 10;
+    }
+    #instructions {
+      position: absolute; top: 15px; width: 100%; text-align: center;
+      color: #fff; font-size: 16px; font-weight: bold; text-shadow: 2px 2px 4px #000;
+      pointer-events: none;
+    }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 </head>
 <body>
   <div id="crosshair"></div>
-  <div id="instructions">اضغط على الشاشة لبدء اللعب (WASD للتحرك - الماوس للنظر)</div>
-
+  <div id="instructions">اضغط على الشاشة لبدء اللعب<br>[WASD]: تحرك | [زر أيسر]: تكسير | [زر أيمن]: بناء | [Space]: قفز</div>
+  
   <script>
-    // 1. إعداد المشهد والكاميرا
+    // 1. المشهد والإضاءة
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87ceeb); // لون السماء
+    scene.background = new THREE.Color(0x87ceeb);
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // 2. إضاءة المشهد
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(20, 40, 20);
+    dirLight.position.set(20, 50, 20);
     scene.add(dirLight);
 
-    // 3. أدوات التحكم (Pointer Lock)
+    // 2. أدوات التحكم
     const controls = new THREE.PointerLockControls(camera, document.body);
-    const instructions = document.getElementById('instructions');
+    document.body.addEventListener('click', () => controls.lock());
+    controls.addEventListener('lock', () => document.getElementById('instructions').style.display = 'none');
+    controls.addEventListener('unlock', () => document.getElementById('instructions').style.display = '');
 
-    document.body.addEventListener('click', () => {
-      controls.lock();
-    });
+    // 3. مواد وتكستشرز البلوكات
+    const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+    const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
+    const dirtMat = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
 
-    controls.addEventListener('lock', () => {
-      instructions.style.display = 'none';
-    });
-
-    controls.addEventListener('unlock', () => {
-      instructions.style.display = '';
-    });
-
-    // 4. توليد خريطة الماين كرافت (مكعبات)
-    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const grassMaterial = new THREE.MeshLambertMaterial({ color: 0x557a2b });
-    const dirtMaterial = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
-
-    const worldSize = 16;
-    for (let x = -worldSize; x < worldSize; x++) {
-      for (let z = -worldSize; z < worldSize; z++) {
-        // العشب العشبي العلوي
-        const block = new THREE.Mesh(boxGeometry, grassMaterial);
+    const blocks = [];
+    for (let x = -12; x < 12; x++) {
+      for (let z = -12; z < 12; z++) {
+        const block = new THREE.Mesh(boxGeo, grassMat);
         block.position.set(x, 0, z);
         scene.add(block);
-
-        // الطبقة السفلية (تراب)
-        const subBlock = new THREE.Mesh(boxGeometry, dirtMaterial);
-        subBlock.position.set(x, -1, z);
-        scene.add(subBlock);
+        blocks.push(block);
       }
     }
 
-    // 5. حركات اللاعب
+    camera.position.set(0, 2, 0);
+
+    // 4. الحركة والفيزياء (القفز والجاذبية)
     let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+    let velocityY = 0, canJump = false;
     const velocity = new THREE.Vector3();
     const direction = new THREE.Vector3();
 
@@ -75,6 +76,7 @@
         case 'KeyS': moveBackward = true; break;
         case 'KeyA': moveLeft = true; break;
         case 'KeyD': moveRight = true; break;
+        case 'Space': if (canJump) { velocityY = 8; canJump = false; } break;
       }
     });
 
@@ -87,21 +89,40 @@
       }
     });
 
-    camera.position.y = 2; // ارتفاع الكاميرا (مستوى العين)
+    // 5. تكسير وبناء البلوكات
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2(0, 0);
 
-    // 6. حلقة التحديث (Animation Loop)
+    window.addEventListener('mousedown', (e) => {
+      if (!controls.isLocked) return;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(blocks);
+
+      if (intersects.length > 0) {
+        const intersect = intersects[0];
+        if (e.button === 0) { // تكسير زر أيسر
+          scene.remove(intersect.object);
+          blocks.splice(blocks.indexOf(intersect.object), 1);
+        } else if (e.button === 2) { // بناء زر أيمن
+          const newBlock = new THREE.Mesh(boxGeo, dirtMat);
+          newBlock.position.copy(intersect.object.position).add(intersect.face.normal);
+          scene.add(newBlock);
+          blocks.push(newBlock);
+        }
+      }
+    });
+    window.addEventListener('contextmenu', e => e.preventDefault());
+
+    // 6. حلقة الحركة والتحديث
     let prevTime = performance.now();
-
     function animate() {
       requestAnimationFrame(animate);
-
       const time = performance.now();
       const delta = (time - prevTime) / 1000;
 
       if (controls.isLocked) {
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
-
         direction.z = Number(moveForward) - Number(moveBackward);
         direction.x = Number(moveRight) - Number(moveLeft);
         direction.normalize();
@@ -111,20 +132,21 @@
 
         controls.moveRight(-velocity.x * delta);
         controls.moveForward(-velocity.z * delta);
-      }
 
+        // الجاذبية والقفز
+        velocityY -= 25.0 * delta;
+        camera.position.y += velocityY * delta;
+
+        if (camera.position.y < 2) {
+          velocityY = 0;
+          camera.position.y = 2;
+          canJump = true;
+        }
+      }
       prevTime = time;
       renderer.render(scene, camera);
     }
-
     animate();
-
-    // تعديل الشاشة عند تغيير الحجم
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   </script>
 </body>
-</html
+</html>
