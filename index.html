@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineFun.io Interface</title>
+  <title>MineFun.io Clone</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
@@ -22,13 +22,13 @@
 
     /* Main Layout */
     .main-container { display: flex; height: calc(100vh - 55px); }
-    .viewport-section { width: 32%; height: 100%; position: relative; background: #60a5fa; }
-    .player-nametag { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10; }
+    .viewport-section { width: 35%; height: 100%; position: relative; background: #60a5fa; }
+    .player-nametag { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10; }
     
-    .games-section { width: 68%; height: 100%; padding: 15px; overflow-y: auto; background: #16222f; }
-    .games-grid { display: grid; grid-template-columns: repeat( auto-fill, minmax(130px, 1fr) ); gap: 12px; }
+    .games-section { width: 65%; height: 100%; padding: 15px; overflow-y: auto; background: #16222f; }
+    .games-grid { display: grid; grid-template-columns: repeat( auto-fill, minmax(135px, 1fr) ); gap: 12px; }
     
-    /* Game Cards with Exact Game Thumbnail Styling */
+    /* Game Cards with Embedded SVG Data Artworks */
     .game-card { 
       height: 120px; 
       border-radius: 8px; 
@@ -42,38 +42,36 @@
       border: 2px solid #2a3a4e;
       background-size: cover !important;
       background-position: center !important;
-      background-repeat: no-repeat !important;
     }
     .game-card::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%);
       z-index: 1;
     }
-    .game-card:hover { transform: scale(1.03); border-color: #00d2d3; }
+    .game-card:hover { transform: scale(1.03); border-color: #38ef7d; }
     .card-title { font-size: 12px; font-weight: 900; text-shadow: 2px 2px 3px #000; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px; }
     .badge { position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; z-index: 2; }
     .popular-badge { background: #ff4757; color: white; }
     .updated-badge { background: #2ed573; color: white; }
 
-    /* Game Image URLs matched to MineFun style */
-    .g-infection { background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png'), linear-gradient(135deg, #10ac84, #1dd1a1); }
-    .g-parkour { background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80'); }
-    .g-creative { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80'); }
-    .g-hideandseek { background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80'); }
-    .g-thewar { background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80'); }
-    .g-skywars { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80'); }
-    .g-oneblock { background-image: url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80'); }
-    .g-bedwars { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80'); }
-    .g-sandbox { background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80'); }
-    .g-raid { background-image: url('https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=300&q=80'); }
-    .g-stealapet { background-image: url('https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=300&q=80'); }
-    .g-dressup { background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=300&q=80'); }
-    .g-gardengrow { background-image: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=300&q=80'); }
-    .g-comingsoon { background: #222f3e; justify-content: center; align-items: center; }
+    /* SVG Graphical Backgrounds per Game Mode */
+    .g-infection { background: #1dd1a1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%2310ac84" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="9" cy="9" r="2" fill="%23000"/><circle cx="15" cy="9" r="2" fill="%23000"/><path fill="%23000" d="M12 14c-2 0-3 1-3 2h6c0-1-1-2-3-2z"/></svg>') no-repeat center 20%; }
+    .g-parkour { background: #ff6b6b url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23ee5253" d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg>') no-repeat center 20%; }
+    .g-creative { background: #a29bfe url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%236c5ce7" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>') no-repeat center 20%; }
+    .g-hideandseek { background: #feca57 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23ff9f43" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>') no-repeat center 20%; }
+    .g-thewar { background: #ff4757 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%232f3542" d="M6.92 5c-1.3 0-2.42.82-2.83 2L1 15v2h2l2 4 3-1V7.8c-.3-.5-.6-1.3-1.08-2.8zM17.08 5c.48 1.5.78 2.3 1.08 2.8V20l3 1 2-4h2v-2l-3.09-8c-.41-1.18-1.53-2-2.83-2zM12 2a4 4 0 0 0-4 4v12a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/></svg>') no-repeat center 20%; }
+    .g-skywars { background: #48dbfb url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%230abde3" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>') no-repeat center 20%; }
+    .g-oneblock { background: #10ac84 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%231dd1a1" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>') no-repeat center 20%; }
+    .g-bedwars { background: #ff6b6b url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23ee5253" d="M19 7h-8v8H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4zm-11 8H3v-4h5v4z"/></svg>') no-repeat center 20%; }
+    .g-sandbox { background: #fca510 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23e17055" d="M19 13H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zM12 3L2 12h20L12 3z"/></svg>') no-repeat center 20%; }
+    .g-raid { background: #eb4d4b url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23130f40" d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>') no-repeat center 20%; }
+    .g-stealapet { background: #e056fd url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23be2edd" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center 20%; }
+    .g-dressup { background: #ff7979 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23badc58" d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>') no-repeat center 20%; }
+    .g-gardengrow { background: #6ab04c url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%232ed573" d="M12 3E6 3 3 10.5 3 15 12 15s9-4.5 9-12c-7.5 0-12 4.5-12 9zM12 15v6"/></svg>') no-repeat center 20%; }
 
-    /* Interactive Gameplay Screen */
+    /* Gameplay Screen Overlay */
     #game-screen { display: none; position: fixed; inset: 0; z-index: 9999; background: #000; }
     #game-hud { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 10000; }
     .exit-btn { background: #ff4757; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
@@ -82,7 +80,7 @@
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
+  <!-- Top Bar -->
   <header class="top-bar" id="main-header">
     <div class="profile-card">
       <div class="avatar-icon"></div>
@@ -95,7 +93,7 @@
     </div>
   </header>
 
-  <!-- Main Viewport -->
+  <!-- Main View -->
   <div class="main-container" id="main-layout">
     <div class="viewport-section" id="canvas-container">
       <div class="player-nametag">NURIPLAYZ</div>
@@ -116,7 +114,6 @@
         <div class="game-card g-stealapet" onclick="playGame('STEAL A PET')"><span class="badge updated-badge">UPDATED</span><div class="card-title">STEAL A PET</div></div>
         <div class="game-card g-dressup" onclick="playGame('DRESS UP')"><div class="card-title">DRESS UP</div></div>
         <div class="game-card g-gardengrow" onclick="playGame('GARDEN GROW')"><span class="badge updated-badge">UPDATED</span><div class="card-title">GARDEN GROW</div></div>
-        <div class="game-card g-comingsoon"><div class="card-title" style="color:#8395a7;">? COMING SOON</div></div>
       </div>
     </div>
   </div>
@@ -132,59 +129,71 @@
   </div>
 
   <script>
-    // --- 1. بناء نسيج الوجه والشعر والتفاصيل برمجياً ---
-    function generateSteveTexture() {
+    // --- 1. تكستشر الوجه والعيون المخصص للجهة الأمامية فقط ---
+    function createFaceTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 64; canvas.height = 64;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = '#b87b4b'; ctx.fillRect(0, 0, 64, 64);
-      ctx.fillStyle = '#4a2f13'; ctx.fillRect(0, 0, 32, 8); ctx.fillRect(8, 8, 24, 4);
-      ctx.fillStyle = '#c68b59'; ctx.fillRect(8, 8, 16, 8);
-      
+      // لون البشرة
+      ctx.fillStyle = '#c68b59'; ctx.fillRect(0, 0, 64, 64);
+      // الشعر
+      ctx.fillStyle = '#4a2f13'; ctx.fillRect(0, 0, 64, 20); ctx.fillRect(0, 20, 12, 16); ctx.fillRect(52, 20, 12, 16);
       // العيون
-      ctx.fillStyle = '#ffffff'; ctx.fillRect(10, 11, 4, 2); ctx.fillRect(18, 11, 4, 2);
-      ctx.fillStyle = '#2b3b93'; ctx.fillRect(12, 11, 2, 2); ctx.fillRect(18, 11, 2, 2);
-      ctx.fillStyle = '#522811'; ctx.fillRect(13, 14, 6, 2);
-
-      // الملابس
-      ctx.fillStyle = '#00a8a8'; ctx.fillRect(16, 20, 24, 12);
-      ctx.fillStyle = '#1c2357'; ctx.fillRect(0, 20, 16, 12);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(12, 28, 14, 8); ctx.fillRect(38, 28, 14, 8);
+      ctx.fillStyle = '#2b3b93'; ctx.fillRect(18, 28, 8, 8); ctx.fillRect(38, 28, 8, 8);
+      // الأنف والفم
+      ctx.fillStyle = '#a16538'; ctx.fillRect(26, 38, 12, 6);
+      ctx.fillStyle = '#522811'; ctx.fillRect(22, 48, 20, 6);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.NearestFilter;
       return texture;
     }
 
-    const steveTexture = generateSteveTexture();
-
+    // --- 2. بناء المجسم وتوزيع الخامات بدقة لمنع التشوه ---
     function createPlayerModel() {
       const group = new THREE.Group();
-      const mat = new THREE.MeshLambertMaterial({ map: steveTexture });
 
-      const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), mat);
-      head.position.y = 1.8; group.add(head);
+      const skinMat = new THREE.MeshLambertMaterial({ color: 0xc68b59 });
+      const hairMat = new THREE.MeshLambertMaterial({ color: 0x4a2f13 });
+      const faceMat = new THREE.MeshLambertMaterial({ map: createFaceTexture() });
+      const shirtMat = new THREE.MeshLambertMaterial({ color: 0x00a8a8 });
+      const pantsMat = new THREE.MeshLambertMaterial({ color: 0x1c2357 });
 
-      const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), mat);
-      body.position.y = 0.8; group.add(body);
+      // الرأس (الوجه يظهر في الأمام فقط Index 4)
+      const headMaterials = [hairMat, hairMat, hairMat, skinMat, faceMat, hairMat];
+      const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), headMaterials);
+      head.position.y = 1.8;
+      group.add(head);
 
-      const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
-      leftArm.position.set(-0.61, 0.8, 0); group.add(leftArm);
+      // الجسم (قميص ستيف الأزرق)
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), shirtMat);
+      body.position.y = 0.8;
+      group.add(body);
 
-      const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
-      rightArm.position.set(0.61, 0.8, 0); group.add(rightArm);
+      // اليدين
+      const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.2, 0.36), shirtMat);
+      leftArm.position.set(-0.6, 0.8, 0);
+      group.add(leftArm);
 
-      const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
-      leftLeg.position.set(-0.21, -0.4, 0); group.add(leftLeg);
+      const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.2, 0.36), shirtMat);
+      rightArm.position.set(0.6, 0.8, 0);
+      group.add(rightArm);
 
-      const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
-      rightLeg.position.set(0.21, -0.4, 0); group.add(rightLeg);
+      // الأرجل (بنطال أزرق غامق)
+      const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.2, 0.36), pantsMat);
+      leftLeg.position.set(-0.2, -0.4, 0);
+      group.add(leftLeg);
+
+      const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.2, 0.36), pantsMat);
+      rightLeg.position.set(0.2, -0.4, 0);
+      group.add(rightLeg);
 
       return group;
     }
 
-    // --- 2. مشهد اللوبي 3D ---
+    // --- 3. عرض اللوبي ثلاثي الأبعاد ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x60a5fa);
@@ -194,32 +203,34 @@
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    dirLight.position.set(5, 10, 7); scene.add(dirLight);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
 
     const islandGroup = new THREE.Group();
     const grass = new THREE.Mesh(new THREE.CylinderGeometry(3, 2.5, 0.8, 8), new THREE.MeshLambertMaterial({ color: 0x557a2b }));
     islandGroup.add(grass);
 
     const dirt = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 0.5, 2.5, 8), new THREE.MeshLambertMaterial({ color: 0x8b5a2b }));
-    dirt.position.y = -1.55; islandGroup.add(dirt);
+    dirt.position.y = -1.55;
+    islandGroup.add(dirt);
 
     const lobbyPlayer = createPlayerModel();
     islandGroup.add(lobbyPlayer);
     scene.add(islandGroup);
 
-    camera.position.set(0, 2.2, 6.5);
+    camera.position.set(0, 2.0, 6.0);
     camera.lookAt(0, 0.5, 0);
 
     function renderLobby() {
       requestAnimationFrame(renderLobby);
-      islandGroup.rotation.y += 0.005;
+      islandGroup.rotation.y += 0.006;
       renderer.render(scene, camera);
     }
     renderLobby();
 
-    // --- 3. محرك تشغيل اللعبة عند الضغط ---
+    // --- 4. وضع اللعب عند النقر على أي لعبة ---
     let activeScene, activeCamera, activeRenderer, interactivePlayer, animId;
     let keys = {};
     let velocityY = 0, onGround = true;
@@ -243,10 +254,13 @@
 
       activeScene.add(new THREE.AmbientLight(0xffffff, 0.8));
       const l = new THREE.DirectionalLight(0xffffff, 0.6);
-      l.position.set(10, 20, 10); activeScene.add(l);
+      l.position.set(10, 20, 10);
+      activeScene.add(l);
 
+      // الأرضية والبلكات
       const floor = new THREE.Mesh(new THREE.BoxGeometry(60, 1, 60), new THREE.MeshLambertMaterial({ color: 0x2ed573 }));
-      floor.position.y = -0.5; activeScene.add(floor);
+      floor.position.y = -0.5;
+      activeScene.add(floor);
 
       for(let i=0; i<25; i++) {
         const block = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshLambertMaterial({ color: 0xff4757 }));
@@ -286,7 +300,7 @@
       if (interactivePlayer.position.y > 0) { velocityY -= 0.015; }
       else { interactivePlayer.position.y = 0; velocityY = 0; onGround = true; }
 
-      activeCamera.position.set(interactivePlayer.position.x, interactivePlayer.position.y + 4, interactivePlayer.position.z + 7);
+      activeCamera.position.set(interactivePlayer.position.x, interactivePlayer.position.y + 3.5, interactivePlayer.position.z + 6.5);
       activeCamera.lookAt(interactivePlayer.position.x, interactivePlayer.position.y + 1, interactivePlayer.position.z);
 
       activeRenderer.render(activeScene, activeCamera);
