@@ -3,40 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineFun.io Clone</title>
+  <title>MineFun.io Full Interface</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-  <!-- 1. الشريط العلوي Top Navigation Bar -->
+  <!-- 1. الشريط العلوي Header -->
   <header class="top-bar">
-    <div class="profile-section">
-      <div class="avatar-icon"></div>
-      <div class="player-info">
+    <div class="profile-container">
+      <div class="profile-card">
+        <div class="avatar-icon"></div>
         <span class="username" id="display-name">NURIPLAYZ</span>
-        <span class="status-tag">LOADING...</span>
+      </div>
+      
+      <!-- أزرار الهدايا والأصدقاء تحت الاسم -->
+      <div class="sub-profile-btns">
+        <div class="wheel-btn" title="Lucky Wheel">🎡</div>
+        <div class="gift-btn" title="Free Reward">🎁 <span class="badge-free">FREE</span></div>
+        <button class="friends-btn">👥 FRIENDS</button>
       </div>
     </div>
 
     <div class="logo">MINEFUN<span>.io</span></div>
 
     <div class="top-menu">
+      <button class="icon-btn download-btn">📥</button>
       <button class="nav-btn shop-btn">🛒 SHOP</button>
       <button class="nav-btn pets-btn">🐾 PETS</button>
       <button class="icon-btn">⚙️</button>
     </div>
   </header>
 
-  <!-- 2. جسم اللعبة الأساسي Split Layout -->
+  <!-- 2. التقسيم الرئيسي Main Layout -->
   <div class="main-container">
     
-    <!-- الجانب الأيسر: عرض السكن بـ 3D -->
+    <!-- الجانب الأيسر: عرض السكن بـ 3D + الإعلان -->
     <div class="viewport-section" id="canvas-container">
       <div class="player-nametag">NURIPLAYZ</div>
+
+      <!-- بنر الإعلان الجانبي -->
+      <div class="ad-banner">
+        <div class="ad-header">Acrobat Bunu Başardı.</div>
+        <div class="ad-body">
+          <p>Ücretsiz denemeyi başlat</p>
+          <button class="ad-btn">Send</button>
+        </div>
+        <div class="ad-footer">Adobe Acrobat Pro</div>
+      </div>
     </div>
 
-    <!-- الجانب الأيمن: قائمة المودات Modes Grid -->
+    <!-- الجانب الأيمن: بطاقات الألعاب -->
     <div class="games-section">
       <div class="games-grid">
         
@@ -90,6 +107,16 @@
           <div class="card-title">DRESS UP</div>
         </div>
 
+        <!-- قسم الألعاب المخصصة Custom Games -->
+        <div class="custom-games-box">
+          <div class="custom-title">CUSTOM GAMES</div>
+          <div class="custom-icons">
+            <span class="c-icon">🎮</span>
+            <span class="c-icon">🎲</span>
+            <span class="c-icon">⚔️</span>
+          </div>
+        </div>
+
         <div class="game-card updated">
           <span class="badge updated-badge">UPDATED</span>
           <div class="card-title">GARDEN GROW</div>
@@ -104,13 +131,22 @@
         </div>
 
       </div>
+
+      <!-- أزرار أسفل اليمين (Discord & Free Box) -->
+      <div class="bottom-right-widgets">
+        <button class="discord-btn">👾</button>
+        <div class="free-box">
+          <span class="multiplier">x2</span>
+          <span class="chest-icon">🧰</span>
+          <span class="free-text">FREE</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 3. كود بناء المجسم والجزيرة (Three.js) -->
+  <!-- Three.js Visualiser -->
   <script>
     const container = document.getElementById('canvas-container');
-    
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
 
@@ -126,9 +162,8 @@
     dirLight.position.set(5, 10, 7);
     scene.add(dirLight);
 
-    // بناء الجزيرة العائمة
+    // الجزيرة والشخصية
     const islandGroup = new THREE.Group();
-    
     const grassGeo = new THREE.CylinderGeometry(3, 2.5, 0.8, 8);
     const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
     const grass = new THREE.Mesh(grassGeo, grassMat);
@@ -140,16 +175,15 @@
     dirt.position.y = -1.55;
     islandGroup.add(dirt);
 
-    // مجسم الشخصية
     const characterGroup = new THREE.Group();
     const headMat = new THREE.MeshLambertMaterial({ color: 0xffcc99 });
-    const bodyMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const shirtMat = new THREE.MeshLambertMaterial({ color: 0x38bdf8 });
 
     const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), headMat);
     head.position.y = 1.8;
     characterGroup.add(head);
 
-    const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), bodyMat);
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), shirtMat);
     body.position.y = 0.8;
     characterGroup.add(body);
 
