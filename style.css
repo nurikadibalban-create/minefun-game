@@ -1,4 +1,4 @@
-/* إعادة ضبط الصفحات والخطوط */
+/* إعادة ضبط الصفحات والخطوط الأساسية */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,71 +14,145 @@ body, html {
   -webkit-user-select: none;
 }
 
-/* مؤشر التصويب (Crosshair) في منتصف الشاشة */
+/* القائمة الرئيسية (Lobby) */
+#menu-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  color: #ffffff;
+}
+
+/* عنوان اللعبة الرئيسي */
+.title {
+  font-size: 42px;
+  font-weight: 900;
+  color: #38bdf8;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+/* صندوق خيارات اللعبة */
+.menu-box {
+  background: rgba(30, 41, 59, 0.95);
+  border: 2px solid #334155;
+  border-radius: 16px;
+  padding: 24px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* حقل كتابة اسم المستخدم */
+input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: #ffffff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #38bdf8;
+}
+
+/* أزرار اختيار المودات (BedWars / SkyWars / Parkour) */
+.mode-select {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px 6px;
+  background: #334155;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+  background: #475569;
+}
+
+.mode-btn.active {
+  border-color: #38bdf8;
+  background: #0284c7;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+/* زر دخول اللعبة */
+.play-btn {
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.play-btn:hover {
+  background: #16a34a;
+}
+
+.play-btn:active {
+  transform: scale(0.98);
+}
+
+/* عناصر الواجهة أثناء اللعب (HUD) */
 #crosshair {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 8px;
   height: 8px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 2px solid rgba(0, 0, 0, 0.6);
+  background: #ffffff;
+  border: 2px solid #000000;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 10;
+  display: none;
 }
 
-/* شاشة التعليمات والبداية */
-#instructions {
+#game-info {
   position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.75);
   color: #ffffff;
-  padding: 12px 24px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  pointer-events: none;
-  z-index: 10;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* شريط الأدوات البسيط (Inventory / Hotbar) */
-#hotbar {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 6px;
+  padding: 10px 16px;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  z-index: 10;
-}
-
-.slot {
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
   font-weight: bold;
   font-size: 14px;
-}
-
-.slot.active {
-  border-color: #facc15;
-  background: rgba(250, 204, 21, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+  display: none;
 }
