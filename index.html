@@ -17,7 +17,6 @@
         <span class="username" id="display-name">NURIPLAYZ</span>
       </div>
       
-      <!-- أزرار الهدايا والأصدقاء تحت الاسم -->
       <div class="sub-profile-btns">
         <div class="wheel-btn" title="Lucky Wheel">🎡</div>
         <div class="gift-btn" title="Free Reward">🎁 <span class="badge-free">FREE</span></div>
@@ -107,7 +106,6 @@
           <div class="card-title">DRESS UP</div>
         </div>
 
-        <!-- قسم الألعاب المخصصة Custom Games -->
         <div class="custom-games-box">
           <div class="custom-title">CUSTOM GAMES</div>
           <div class="custom-icons">
@@ -132,7 +130,6 @@
 
       </div>
 
-      <!-- أزرار أسفل اليمين (Discord & Free Box) -->
       <div class="bottom-right-widgets">
         <button class="discord-btn">👾</button>
         <div class="free-box">
@@ -155,14 +152,14 @@
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
     dirLight.position.set(5, 10, 7);
     scene.add(dirLight);
 
-    // الجزيرة والشخصية
+    // بناء الجزيرة
     const islandGroup = new THREE.Group();
     const grassGeo = new THREE.CylinderGeometry(3, 2.5, 0.8, 8);
     const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
@@ -175,17 +172,79 @@
     dirt.position.y = -1.55;
     islandGroup.add(dirt);
 
+    // تحميل السكن برابط مباشر يضمن عدم الاختفاء
+    const textureLoader = new THREE.TextureLoader();
+    const skinUrl = 'https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.12.2/assets/minecraft/textures/entity/steve.png';
+    
+    const skinTexture = textureLoader.load(skinUrl, () => {
+      skinTexture.magFilter = THREE.NearestFilter;
+      skinTexture.minFilter = THREE.NearestFilter;
+      skinTexture.needsUpdate = true;
+    });
+
+    const skinMaterial = new THREE.MeshLambertMaterial({
+      map: skinTexture,
+      transparent: true
+    });
+
+    function createSkinBlock(width, height, depth, u, v) {
+      const geometry = new THREE.BoxGeometry(width, height, depth);
+      const texW = 64, texH = 32;
+      const faces = [
+        [u + depth + width, v + depth, u + depth + width + depth, v + depth + height],
+        [u, v + depth, u + depth, v + depth + height],
+        [u + depth, v, u + depth + width, v + depth],
+        [u + depth + width, v, u + depth + width + width, v + depth],
+        [u + depth, v + depth, u + depth + width, v + depth + height],
+        [u + depth + width + depth, v + depth, u + 2*depth + 2*width, v + depth + height]
+      ];
+
+      const uvs = [];
+      for (let i = 0; i < 6; i++) {
+        const [x1, y1, x2, y2] = faces[i];
+        uvs.push(
+          x1/texW, 1 - y2/texH,
+          x2/texW, 1 - y2/texH,
+          x1/texW, 1 - y1/texH,
+          x2/texW, 1 - y1/texH
+        );
+      }
+      
+      geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      return new THREE.Mesh(geometry, skinMaterial);
+    }
+
     const characterGroup = new THREE.Group();
-    const headMat = new THREE.MeshLambertMaterial({ color: 0xffcc99 });
-    const shirtMat = new THREE.MeshLambertMaterial({ color: 0x38bdf8 });
 
-    const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), headMat);
-    head.position.y = 1.8;
-    characterGroup.add(head);
+    // الرأس
+    const headMesh = createSkinBlock(0.8, 0.8, 0.8, 0, 0);
+    headMesh.position.y = 1.8;
+    characterGroup.add(headMesh);
 
-    const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), shirtMat);
-    body.position.y = 0.8;
-    characterGroup.add(body);
+    // الجذع
+    const bodyMesh = createSkinBlock(0.8, 1.2, 0.4, 16, 16);
+    bodyMesh.position.y = 0.8;
+    characterGroup.add(bodyMesh);
+
+    // الذراع الأيسر
+    const leftArm = createSkinBlock(0.4, 1.2, 0.4, 40, 16);
+    leftArm.position.set(-0.6, 0.8, 0);
+    characterGroup.add(leftArm);
+
+    // الذراع الأيمن
+    const rightArm = createSkinBlock(0.4, 1.2, 0.4, 40, 16);
+    rightArm.position.set(0.6, 0.8, 0);
+    characterGroup.add(rightArm);
+
+    // الرجل اليسرى
+    const leftLeg = createSkinBlock(0.4, 1.2, 0.4, 0, 16);
+    leftLeg.position.set(-0.2, -0.4, 0);
+    characterGroup.add(leftLeg);
+
+    // الرجل اليمنى
+    const rightLeg = createSkinBlock(0.4, 1.2, 0.4, 0, 16);
+    rightLeg.position.set(0.2, -0.4, 0);
+    characterGroup.add(rightLeg);
 
     islandGroup.add(characterGroup);
     scene.add(islandGroup);
