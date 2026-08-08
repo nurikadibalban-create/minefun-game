@@ -1,67 +1,88 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineFun.io Clone</title>
+  <title>MineFun.io Interface</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
-    body { background-color: #1a1e29; color: #fff; overflow: hidden; height: 100vh; }
+    body { background-color: #1b2838; color: #fff; overflow: hidden; height: 100vh; }
 
-    /* Top Bar Header */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #0f131d; height: 60px; border-bottom: 2px solid #2a3142; }
-    .profile-card { display: flex; align-items: center; gap: 10px; background: #222838; padding: 5px 12px; border-radius: 6px; }
-    .avatar-icon { width: 30px; height: 30px; background: #00a8a8; border-radius: 4px; }
-    .username { font-weight: bold; font-size: 14px; }
-    .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; color: #fff; }
+    /* Top Bar */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: #0f161e; height: 55px; border-bottom: 2px solid #232e3d; }
+    .profile-card { display: flex; align-items: center; gap: 8px; background: #17212d; padding: 4px 10px; border-radius: 6px; border: 1px solid #2a3849; }
+    .avatar-icon { width: 28px; height: 28px; background: #00a8a8; border-radius: 4px; }
+    .username { font-weight: bold; font-size: 13px; color: #fff; }
+    .logo { font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
     .logo span { color: #38ef7d; }
-    .top-menu { display: flex; gap: 10px; }
-    .nav-btn { background: #2e384d; border: none; color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .nav-btn:hover { background: #3d4a66; }
-    .shop-btn { background: #f1c40f; color: #000; }
+    .top-menu { display: flex; gap: 8px; }
+    .nav-btn { background: #232e3d; border: 1px solid #324154; color: #fff; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .shop-btn { background: #f1c40f; color: #000; border: none; }
 
-    /* Layout */
-    .main-container { display: flex; height: calc(100vh - 60px); }
-    .viewport-section { width: 35%; height: 100%; position: relative; background: #87ceeb; }
-    .player-nametag { position: absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 14px; z-index: 10; }
+    /* Main Layout */
+    .main-container { display: flex; height: calc(100vh - 55px); }
+    .viewport-section { width: 32%; height: 100%; position: relative; background: #60a5fa; }
+    .player-nametag { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10; }
     
-    .games-section { width: 65%; height: 100%; padding: 20px; overflow-y: auto; background: #151922; }
-    .games-grid { display: grid; grid-template-columns: repeat( auto-fill, minmax(130px, 1fr) ); gap: 15px; }
+    .games-section { width: 68%; height: 100%; padding: 15px; overflow-y: auto; background: #16222f; }
+    .games-grid { display: grid; grid-template-columns: repeat( auto-fill, minmax(130px, 1fr) ); gap: 12px; }
     
-    /* Game Cards with Custom CSS Background Art */
-    .game-card { height: 120px; border-radius: 10px; position: relative; display: flex; align-items: flex-end; padding: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; border: 2px solid #2c354a; }
-    .game-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.6); border-color: #38ef7d; }
-    .card-title { font-size: 12px; font-weight: 900; text-shadow: 1px 1px 3px #000; z-index: 2; text-transform: uppercase; }
+    /* Game Cards with Exact Game Thumbnail Styling */
+    .game-card { 
+      height: 120px; 
+      border-radius: 8px; 
+      position: relative; 
+      display: flex; 
+      align-items: flex-end; 
+      padding: 8px; 
+      cursor: pointer; 
+      transition: transform 0.15s, border-color 0.15s; 
+      overflow: hidden; 
+      border: 2px solid #2a3a4e;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
+    .game-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+      z-index: 1;
+    }
+    .game-card:hover { transform: scale(1.03); border-color: #00d2d3; }
+    .card-title { font-size: 12px; font-weight: 900; text-shadow: 2px 2px 3px #000; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px; }
     .badge { position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; z-index: 2; }
     .popular-badge { background: #ff4757; color: white; }
     .updated-badge { background: #2ed573; color: white; }
 
-    /* Distinct Image Styles per Game */
-    .g-infection { background: linear-gradient(135deg, #11998e, #38ef7d); }
-    .g-parkour { background: linear-gradient(135deg, #FF512F, #DD2476); }
-    .g-creative { background: linear-gradient(135deg, #8E2DE2, #4A00E0); }
-    .g-hideandseek { background: linear-gradient(135deg, #f12711, #f5af19); }
-    .g-thewar { background: linear-gradient(135deg, #200122, #6f0000); }
-    .g-skywars { background: linear-gradient(135deg, #00c6ff, #0072ff); }
-    .g-oneblock { background: linear-gradient(135deg, #56ab2f, #a8e063); }
-    .g-bedwars { background: linear-gradient(135deg, #e1eec3, #f05053); }
-    .g-sandbox { background: linear-gradient(135deg, #f79d00, #64f38c); }
-    .g-raid { background: linear-gradient(135deg, #cb2d3e, #ef473a); }
-    .g-stealapet { background: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59); }
-    .g-dressup { background: linear-gradient(135deg, #b92b27, #1565C0); }
-    .g-gardengrow { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    /* Game Image URLs matched to MineFun style */
+    .g-infection { background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png'), linear-gradient(135deg, #10ac84, #1dd1a1); }
+    .g-parkour { background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80'); }
+    .g-creative { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80'); }
+    .g-hideandseek { background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80'); }
+    .g-thewar { background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80'); }
+    .g-skywars { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80'); }
+    .g-oneblock { background-image: url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80'); }
+    .g-bedwars { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=300&q=80'); }
+    .g-sandbox { background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80'); }
+    .g-raid { background-image: url('https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=300&q=80'); }
+    .g-stealapet { background-image: url('https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=300&q=80'); }
+    .g-dressup { background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=300&q=80'); }
+    .g-gardengrow { background-image: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=300&q=80'); }
+    .g-comingsoon { background: #222f3e; justify-content: center; align-items: center; }
 
-    /* Interactive Game Screen Overlay */
-    #game-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; background: #000; }
-    #game-hud { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 10000; }
-    .exit-btn { background: #ff4757; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; }
-    .controls-info { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 10000; }
+    /* Interactive Gameplay Screen */
+    #game-screen { display: none; position: fixed; inset: 0; z-index: 9999; background: #000; }
+    #game-hud { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 10000; }
+    .exit-btn { background: #ff4757; color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .controls-info { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 8px 18px; border-radius: 20px; font-size: 13px; z-index: 10000; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Top Navigation Bar -->
   <header class="top-bar" id="main-header">
     <div class="profile-card">
       <div class="avatar-icon"></div>
@@ -74,7 +95,7 @@
     </div>
   </header>
 
-  <!-- Main Interface -->
+  <!-- Main Viewport -->
   <div class="main-container" id="main-layout">
     <div class="viewport-section" id="canvas-container">
       <div class="player-nametag">NURIPLAYZ</div>
@@ -95,45 +116,39 @@
         <div class="game-card g-stealapet" onclick="playGame('STEAL A PET')"><span class="badge updated-badge">UPDATED</span><div class="card-title">STEAL A PET</div></div>
         <div class="game-card g-dressup" onclick="playGame('DRESS UP')"><div class="card-title">DRESS UP</div></div>
         <div class="game-card g-gardengrow" onclick="playGame('GARDEN GROW')"><span class="badge updated-badge">UPDATED</span><div class="card-title">GARDEN GROW</div></div>
+        <div class="game-card g-comingsoon"><div class="card-title" style="color:#8395a7;">? COMING SOON</div></div>
       </div>
     </div>
   </div>
 
-  <!-- Gameplay View Mode -->
+  <!-- Interactive Gameplay Mode -->
   <div id="game-screen">
     <div id="game-hud">
-      <h2 id="current-game-title">GAME MODE</h2>
-      <button class="exit-btn" onclick="exitToLobby()">🚪 خروج للقائمة</button>
+      <h2 id="current-game-title" style="color:#fff; text-shadow:0 2px 4px #000;">GAME MODE</h2>
+      <button class="exit-btn" onclick="exitToLobby()">🚪 العودة للقائمة</button>
     </div>
     <div class="controls-info">التحكم: <b>WASD</b> أو الأسهم للمشي | <b>Space</b> للقفز</div>
     <div id="game-3d-view" style="width:100%; height:100%;"></div>
   </div>
 
   <script>
-    // --- 1. بناء التكستشر تلقائياً برمجياً لتأكيد ظهور الوجه والعيون والأذرع والبنطال ---
+    // --- 1. بناء نسيج الوجه والشعر والتفاصيل برمجياً ---
     function generateSteveTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 64; canvas.height = 64;
       const ctx = canvas.getContext('2d');
 
-      // البشرة الأساسية
       ctx.fillStyle = '#b87b4b'; ctx.fillRect(0, 0, 64, 64);
-
-      // الشعر والوجه (قسم الرأس)
-      ctx.fillStyle = '#4a2f13'; ctx.fillRect(0, 0, 32, 8); ctx.fillRect(8, 8, 24, 4); // شعر
-      ctx.fillStyle = '#c68b59'; ctx.fillRect(8, 8, 16, 8); // بشرة الوجه
+      ctx.fillStyle = '#4a2f13'; ctx.fillRect(0, 0, 32, 8); ctx.fillRect(8, 8, 24, 4);
+      ctx.fillStyle = '#c68b59'; ctx.fillRect(8, 8, 16, 8);
       
-      // العيون (أبيض وبؤبؤ أزرق)
+      // العيون
       ctx.fillStyle = '#ffffff'; ctx.fillRect(10, 11, 4, 2); ctx.fillRect(18, 11, 4, 2);
       ctx.fillStyle = '#2b3b93'; ctx.fillRect(12, 11, 2, 2); ctx.fillRect(18, 11, 2, 2);
-      
-      // الفم والأنف
       ctx.fillStyle = '#522811'; ctx.fillRect(13, 14, 6, 2);
 
-      // القميص الأزرق
+      // الملابس
       ctx.fillStyle = '#00a8a8'; ctx.fillRect(16, 20, 24, 12);
-
-      // البنطال الغامق
       ctx.fillStyle = '#1c2357'; ctx.fillRect(0, 20, 16, 12);
 
       const texture = new THREE.CanvasTexture(canvas);
@@ -144,27 +159,22 @@
 
     const steveTexture = generateSteveTexture();
 
-    // --- 2. بناء مجسم ستيف ثلاثي الأبعاد بأبعاد وأجزاء منفصلة ---
     function createPlayerModel() {
       const group = new THREE.Group();
       const mat = new THREE.MeshLambertMaterial({ map: steveTexture });
 
-      // الرأس
       const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), mat);
       head.position.y = 1.8; group.add(head);
 
-      // الجسم
       const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), mat);
       body.position.y = 0.8; group.add(body);
 
-      // الأذرع (منفصلة)
       const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
       leftArm.position.set(-0.61, 0.8, 0); group.add(leftArm);
 
       const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
       rightArm.position.set(0.61, 0.8, 0); group.add(rightArm);
 
-      // الأرجل (منفصلة)
       const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.2, 0.38), mat);
       leftLeg.position.set(-0.21, -0.4, 0); group.add(leftLeg);
 
@@ -174,10 +184,10 @@
       return group;
     }
 
-    // --- 3. إعداد مشهد اللوبي 3D ---
+    // --- 2. مشهد اللوبي 3D ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87ceeb);
+    scene.background = new THREE.Color(0x60a5fa);
 
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -204,12 +214,12 @@
 
     function renderLobby() {
       requestAnimationFrame(renderLobby);
-      islandGroup.rotation.y += 0.006;
+      islandGroup.rotation.y += 0.005;
       renderer.render(scene, camera);
     }
     renderLobby();
 
-    // --- 4. محرك اللعب التفاعلي عند الكليك ---
+    // --- 3. محرك تشغيل اللعبة عند الضغط ---
     let activeScene, activeCamera, activeRenderer, interactivePlayer, animId;
     let keys = {};
     let velocityY = 0, onGround = true;
@@ -218,13 +228,13 @@
       document.getElementById('main-header').style.display = 'none';
       document.getElementById('main-layout').style.display = 'none';
       document.getElementById('game-screen').style.display = 'block';
-      document.getElementById('current-game-title').innerText = title;
+      document.getElementById('current-game-title').innerText = "MODE: " + title;
 
       const view = document.getElementById('game-3d-view');
       view.innerHTML = '';
 
       activeScene = new THREE.Scene();
-      activeScene.background = new THREE.Color(0x6ab04c);
+      activeScene.background = new THREE.Color(0x74b9ff);
 
       activeCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
       activeRenderer = new THREE.WebGLRenderer({ antialias: true });
@@ -235,13 +245,12 @@
       const l = new THREE.DirectionalLight(0xffffff, 0.6);
       l.position.set(10, 20, 10); activeScene.add(l);
 
-      // الأرضية والبلكات
-      const floor = new THREE.Mesh(new THREE.BoxGeometry(50, 1, 50), new THREE.MeshLambertMaterial({ color: 0xbadc58 }));
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(60, 1, 60), new THREE.MeshLambertMaterial({ color: 0x2ed573 }));
       floor.position.y = -0.5; activeScene.add(floor);
 
-      for(let i=0; i<20; i++) {
-        const block = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshLambertMaterial({ color: 0xeb4d4b }));
-        block.position.set((Math.random()-0.5)*40, 1, (Math.random()-0.5)*40);
+      for(let i=0; i<25; i++) {
+        const block = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshLambertMaterial({ color: 0xff4757 }));
+        block.position.set((Math.random()-0.5)*50, 1, (Math.random()-0.5)*50);
         activeScene.add(block);
       }
 
