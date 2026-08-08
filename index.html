@@ -1,212 +1,175 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineFun Real Lobby</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; user-select: none; }
-
-    /* القائمة الرئيسية قبل بدء اللعب */
-    #menu-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 100; color: white;
-    }
-
-    .title { font-size: 42px; font-weight: 900; color: #38bdf8; text-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-
-    .menu-box {
-      background: rgba(30, 41, 59, 0.95); border: 2px solid #334155; border-radius: 16px;
-      padding: 24px; width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
-    input[type="text"] {
-      width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569;
-      background: #0f172a; color: white; text-align: center; font-size: 16px; margin-bottom: 15px; outline: none;
-    }
-
-    .play-btn {
-      width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px;
-      color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
-    }
-    .play-btn:hover { background: #16a34a; }
-
-    /* HUD اللعبة */
-    #crosshair {
-      position: absolute; top: 50%; left: 50%; width: 8px; height: 8px;
-      background: white; border: 2px solid black; border-radius: 50%;
-      transform: translate(-50%, -50%); pointer-events: none; z-index: 10; display: none;
-    }
-
-    #lobby-ui {
-      position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7);
-      color: white; padding: 12px 18px; border-radius: 8px; font-weight: bold; z-index: 10; display: none;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-  </style>
+  <title>MineFun.io Clone</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 </head>
 <body>
 
-  <!-- شاشة الدخول -->
-  <div id="menu-overlay">
-    <div class="title">MINEFUN LOBBY</div>
-    <div class="menu-box">
-      <input type="text" id="username" value="Nuri_Pro2026" placeholder="ادخل اسمك">
-      <button class="play-btn" onclick="startGame()">دخول اللوبي</button>
+  <!-- 1. الشريط العلوي Top Navigation Bar -->
+  <header class="top-bar">
+    <div class="profile-section">
+      <div class="avatar-icon"></div>
+      <div class="player-info">
+        <span class="username" id="display-name">NURIPLAYZ</span>
+        <span class="status-tag">LOADING...</span>
+      </div>
+    </div>
+
+    <div class="logo">MINEFUN<span>.io</span></div>
+
+    <div class="top-menu">
+      <button class="nav-btn shop-btn">🛒 SHOP</button>
+      <button class="nav-btn pets-btn">🐾 PETS</button>
+      <button class="icon-btn">⚙️</button>
+    </div>
+  </header>
+
+  <!-- 2. جسم اللعبة الأساسي Split Layout -->
+  <div class="main-container">
+    
+    <!-- الجانب الأيسر: عرض السكن بـ 3D -->
+    <div class="viewport-section" id="canvas-container">
+      <div class="player-nametag">NURIPLAYZ</div>
+    </div>
+
+    <!-- الجانب الأيمن: قائمة المودات Modes Grid -->
+    <div class="games-section">
+      <div class="games-grid">
+        
+        <div class="game-card popular">
+          <span class="badge popular-badge">POPULAR</span>
+          <div class="card-title">INFECTION</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">PARKOUR</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">CREATIVE</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">HIDE AND SEEK</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">THE WAR</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">SKY WARS</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">ONE BLOCK</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">BED WARS</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">SANDBOX</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">RAID</div>
+        </div>
+
+        <div class="game-card updated">
+          <span class="badge updated-badge">UPDATED</span>
+          <div class="card-title">STEAL A PET</div>
+        </div>
+
+        <div class="game-card">
+          <div class="card-title">DRESS UP</div>
+        </div>
+
+        <div class="game-card updated">
+          <span class="badge updated-badge">UPDATED</span>
+          <div class="card-title">GARDEN GROW</div>
+        </div>
+
+        <div class="game-card coming-soon">
+          <div class="card-title">COMING SOON</div>
+        </div>
+
+        <div class="game-card coming-soon">
+          <div class="card-title">COMING SOON</div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <div id="crosshair"></div>
-  <div id="lobby-ui">
-    <div>اللاعب: <span id="player-name" style="color: #38bdf8;">--</span></div>
-    <div style="font-size: 12px; color: #aaa; margin-top: 4px;">اقترب من إحدى البوابات لاختيار المود</div>
-  </div>
-
+  <!-- 3. كود بناء المجسم والجزيرة (Three.js) -->
   <script>
-    // 1. المشهد والكاميرا والإضاءة
+    const container = document.getElementById('canvas-container');
+    
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0f172a); // سماء اللوبي الليلية
+    scene.background = new THREE.Color(0x87ceeb);
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0x38bdf8, 1);
-    dirLight.position.set(10, 30, 10);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    dirLight.position.set(5, 10, 7);
     scene.add(dirLight);
 
-    // 2. بناء خريطة اللوبي (Lobby Structure)
-    const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-    const floorMat = new THREE.MeshLambertMaterial({ color: 0x1e293b }); // بلاط أسود/رمادي
-    const borderMat = new THREE.MeshLambertMaterial({ color: 0x3b82f6 }); // حواف مضيئة
-    const portalBedwarsMat = new THREE.MeshBasicMaterial({ color: 0xef4444 }); // بوابة حمراء
-    const portalSkywarsMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // بوابة زرقاء
-    const portalParkourMat = new THREE.MeshBasicMaterial({ color: 0x22c55e }); // بوابة خضراء
+    // بناء الجزيرة العائمة
+    const islandGroup = new THREE.Group();
+    
+    const grassGeo = new THREE.CylinderGeometry(3, 2.5, 0.8, 8);
+    const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
+    const grass = new THREE.Mesh(grassGeo, grassMat);
+    islandGroup.add(grass);
 
-    // أرضية اللوبي الرئيسية
-    for (let x = -15; x <= 15; x++) {
-      for (let z = -15; z <= 15; z++) {
-        const isEdge = (Math.abs(x) === 15 || Math.abs(z) === 15);
-        const block = new THREE.Mesh(boxGeo, isEdge ? borderMat : floorMat);
-        block.position.set(x, 0, z);
-        scene.add(block);
-      }
-    }
+    const dirtGeo = new THREE.CylinderGeometry(2.5, 0.5, 2.5, 8);
+    const dirtMat = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
+    const dirt = new THREE.Mesh(dirtGeo, dirtMat);
+    dirt.position.y = -1.55;
+    islandGroup.add(dirt);
 
-    // جدران محيطة باللوبي
-    for (let i = -15; i <= 15; i++) {
-      for (let y = 1; y <= 4; y++) {
-        const w1 = new THREE.Mesh(boxGeo, borderMat); w1.position.set(i, y, -15); scene.add(w1);
-        const w2 = new THREE.Mesh(boxGeo, borderMat); w2.position.set(i, y, 15); scene.add(w2);
-        const w3 = new THREE.Mesh(boxGeo, borderMat); w3.position.set(-15, y, i); scene.add(w3);
-        const w4 = new THREE.Mesh(boxGeo, borderMat); w4.position.set(15, y, i); scene.add(w4);
-      }
-    }
+    // مجسم الشخصية
+    const characterGroup = new THREE.Group();
+    const headMat = new THREE.MeshLambertMaterial({ color: 0xffcc99 });
+    const bodyMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
 
-    // دالة لبناء بوابة للمود
-    function createPortal(x, z, mat) {
-      const portalGroup = new THREE.Group();
-      for (let y = 1; y <= 4; y++) {
-        const p1 = new THREE.Mesh(boxGeo, borderMat); p1.position.set(-1.5, y, 0); portalGroup.add(p1);
-        const p2 = new THREE.Mesh(boxGeo, borderMat); p2.position.set(1.5, y, 0); portalGroup.add(p2);
-      }
-      const top = new THREE.Mesh(new THREE.BoxGeometry(4, 1, 1), borderMat); top.position.set(0, 4.5, 0); portalGroup.add(top);
-      
-      const lightPlane = new THREE.Mesh(new THREE.PlaneGeometry(2, 3), mat);
-      lightPlane.position.set(0, 2.5, 0);
-      portalGroup.add(lightPlane);
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), headMat);
+    head.position.y = 1.8;
+    characterGroup.add(head);
 
-      portalGroup.position.set(x, 0, z);
-      scene.add(portalGroup);
-    }
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), bodyMat);
+    body.position.y = 0.8;
+    characterGroup.add(body);
 
-    // إضافة بوابات المودات داخل اللوبي
-    createPortal(-8, -12, portalBedwarsMat); // بوابة BedWars
-    createPortal(0, -12, portalSkywarsMat);   // بوابة SkyWars
-    createPortal(8, -12, portalParkourMat);   // بوابة Parkour
+    islandGroup.add(characterGroup);
+    scene.add(islandGroup);
 
-    // 3. الحركة والتحكم
-    const controls = new THREE.PointerLockControls(camera, document.body);
+    camera.position.set(0, 2.5, 7);
+    camera.lookAt(0, 0.5, 0);
 
-    function startGame() {
-      const name = document.getElementById('username').value || 'Player';
-      document.getElementById('player-name').innerText = name;
-
-      document.getElementById('menu-overlay').style.display = 'none';
-      document.getElementById('crosshair').style.display = 'block';
-      document.getElementById('lobby-ui').style.display = 'block';
-
-      camera.position.set(0, 2, 8); // التموضع في منتصف اللوبي
-      controls.lock();
-    }
-
-    controls.addEventListener('unlock', () => {
-      document.getElementById('menu-overlay').style.display = 'flex';
-      document.getElementById('crosshair').style.display = 'none';
-      document.getElementById('lobby-ui').style.display = 'none';
-    });
-
-    let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
-    const velocity = new THREE.Vector3();
-    const direction = new THREE.Vector3();
-
-    document.addEventListener('keydown', (e) => {
-      switch (e.code) {
-        case 'KeyW': moveForward = true; break;
-        case 'KeyS': moveBackward = true; break;
-        case 'KeyA': moveLeft = true; break;
-        case 'KeyD': moveRight = true; break;
-      }
-    });
-
-    document.addEventListener('keyup', (e) => {
-      switch (e.code) {
-        case 'KeyW': moveForward = false; break;
-        case 'KeyS': moveBackward = false; break;
-        case 'KeyA': moveLeft = false; break;
-        case 'KeyD': moveRight = false; break;
-      }
-    });
-
-    // 4. حلقة التحديث
-    let prevTime = performance.now();
     function animate() {
       requestAnimationFrame(animate);
-      const time = performance.now();
-      const delta = (time - prevTime) / 1000;
-
-      if (controls.isLocked) {
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
-
-        direction.z = Number(moveForward) - Number(moveBackward);
-        direction.x = Number(moveRight) - Number(moveLeft);
-        direction.normalize();
-
-        if (moveForward || moveBackward) velocity.z -= direction.z * 30.0 * delta;
-        if (moveLeft || moveRight) velocity.x -= direction.x * 30.0 * delta;
-
-        controls.moveRight(-velocity.x * delta);
-        controls.moveForward(-velocity.z * delta);
-      }
-
-      prevTime = time;
+      islandGroup.rotation.y += 0.005;
       renderer.render(scene, camera);
     }
     animate();
 
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(container.clientWidth, container.clientHeight);
     });
   </script>
 </body>
