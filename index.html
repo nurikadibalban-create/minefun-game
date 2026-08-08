@@ -287,6 +287,8 @@
 
     /* Match 3D Map & Camera System */
     let activeScene, activeCamera, activeRenderer, animId, timerInterval, countdown = 15;
+    let isGameStarted = false;
+    let playerPosition = new THREE.Vector3();
 
     function buildBedWarsMap(scene) {
       const grassMat = new THREE.MeshLambertMaterial({ color: 0x4cd137 });
@@ -384,6 +386,12 @@
       activeCamera.add(handGroup);
       activeScene.add(activeCamera);
 
+      // تعيين موقع جزيرة الفريق الأول (اللون الأحمر - Red Team)
+      const radius = 45;
+      const angle = 0;
+      playerPosition.set(Math.cos(angle) * radius, 3, Math.sin(angle) * radius);
+
+      isGameStarted = false;
       activeCamera.position.set(0, 42, 50);
       activeCamera.lookAt(0, -5, 0);
 
@@ -391,10 +399,17 @@
       clearInterval(timerInterval);
       timerInterval = setInterval(() => {
         countdown--;
-        if (countdown >= 0) {
+        if (countdown > 0) {
           document.getElementById('timer-text').innerText = `TIME TO START THE GAME ${countdown}s`;
         } else {
           document.getElementById('timer-text').innerText = `GAME STARTED!`;
+          
+          // عند بدء اللعبة ينزل اللاعب إلى جزيرة حمرته الخاصة
+          isGameStarted = true;
+          activeCamera.position.copy(playerPosition);
+          activeCamera.lookAt(0, 0, 0); // توجيه النظرة نحو منتصف الخريطة
+          
+          clearInterval(timerInterval);
         }
       }, 1000);
 
@@ -411,10 +426,18 @@
 
     function runMatchLoop() {
       animId = requestAnimationFrame(runMatchLoop);
-      const time = Date.now() * 0.0003;
-      activeCamera.position.x = Math.sin(time) * 55;
-      activeCamera.position.z = Math.cos(time) * 55;
-      activeCamera.lookAt(0, -2, 0);
+
+      if (!isGameStarted) {
+        // حركة دورانية فوق الخريطة قبل بدء اللعبة
+        const time = Date.now() * 0.0003;
+        activeCamera.position.x = Math.sin(time) * 55;
+        activeCamera.position.z = Math.cos(time) * 55;
+        activeCamera.position.y = 42;
+        activeCamera.lookAt(0, -2, 0);
+      } else {
+        // الثبات في الموقع المخصص للاعب فوق جزيرته عند انطلاق الجولة
+        activeCamera.position.copy(playerPosition);
+      }
 
       activeRenderer.render(activeScene, activeCamera);
     }
