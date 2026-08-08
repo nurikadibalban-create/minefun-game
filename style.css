@@ -1,28 +1,84 @@
-body {
+/* إعادة ضبط الصفحات والخطوط */
+* {
+  box-sizing: border-box;
   margin: 0;
-  overflow: hidden;
-  font-family: sans-serif;
+  padding: 0;
 }
 
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* مؤشر التصويب (Crosshair) في منتصف الشاشة */
 #crosshair {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  background-color: white;
-  border: 2px solid black;
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  z-index: 10;
 }
 
+/* شاشة التعليمات والبداية */
 #instructions {
   position: absolute;
   top: 20px;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 10px;
   text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* شريط الأدوات البسيط (Inventory / Hotbar) */
+#hotbar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.slot {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
-  text-shadow: 1px 1px 3px black;
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.slot.active {
+  border-color: #facc15;
+  background: rgba(250, 204, 21, 0.2);
 }
