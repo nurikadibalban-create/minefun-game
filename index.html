@@ -6,10 +6,102 @@
   <title>MineFun.io Full Interface</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    /* تصميم بطاقات الألعاب مع الصور الخلفية */
+    .game-card {
+      position: relative;
+      background-size: cover !important;
+      background-position: center !important;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+      z-index: 1;
+    }
+
+    .game-card:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .card-title, .badge {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* صور خلفية مخصصة للألعاب */
+    .card-infection { background-image: url('https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=400&q=80'); }
+    .card-parkour { background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80'); }
+    .card-creative { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'); }
+    .card-hideandseek { background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80'); }
+    .card-thewar { background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80'); }
+    .card-skywars { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80'); }
+    .card-oneblock { background-image: url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80'); }
+    .card-bedwars { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80'); }
+    .card-sandbox { background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80'); }
+    .card-raid { background-image: url('https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=400&q=80'); }
+    .card-stealapet { background-image: url('https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=400&q=80'); }
+    .card-dressup { background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=400&q=80'); }
+    .card-gardengrow { background-image: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'); }
+
+    /* شاشة اللعب المباشر */
+    #game-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #000;
+      z-index: 9999;
+    }
+
+    #game-ui {
+      position: absolute;
+      top: 20px; left: 20px; right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+
+    .exit-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .exit-btn:hover { background: #ff6b81; }
+
+    .game-controls-hint {
+      position: absolute;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-family: sans-serif;
+      font-size: 14px;
+      z-index: 10000;
+    }
+  </style>
 </head>
 <body>
 
-  <header class="top-bar">
+  <!-- 1. القائمة الرئيسية -->
+  <header class="top-bar" id="main-header">
     <div class="profile-container">
       <div class="profile-card">
         <div class="avatar-icon"></div>
@@ -30,7 +122,7 @@
     </div>
   </header>
 
-  <div class="main-container">
+  <div class="main-container" id="main-container">
     <div class="viewport-section" id="canvas-container">
       <div class="player-nametag">NURIPLAYZ</div>
       <div class="ad-banner">
@@ -43,32 +135,87 @@
       </div>
     </div>
 
+    <!-- شبكة بطاقات الألعاب التفاعلية -->
     <div class="games-section">
       <div class="games-grid">
-        <div class="game-card popular"><span class="badge popular-badge">POPULAR</span><div class="card-title">INFECTION</div></div>
-        <div class="game-card"><div class="card-title">PARKOUR</div></div>
-        <div class="game-card"><div class="card-title">CREATIVE</div></div>
-        <div class="game-card"><div class="card-title">HIDE AND SEEK</div></div>
-        <div class="game-card"><div class="card-title">THE WAR</div></div>
-        <div class="game-card"><div class="card-title">SKY WARS</div></div>
-        <div class="game-card"><div class="card-title">ONE BLOCK</div></div>
-        <div class="game-card"><div class="card-title">BED WARS</div></div>
-        <div class="game-card"><div class="card-title">SANDBOX</div></div>
-        <div class="game-card"><div class="card-title">RAID</div></div>
-        <div class="game-card updated"><span class="badge updated-badge">UPDATED</span><div class="card-title">STEAL A PET</div></div>
-        <div class="game-card"><div class="card-title">DRESS UP</div></div>
+        <div class="game-card card-infection popular" onclick="launchGame('INFECTION')">
+          <span class="badge popular-badge">POPULAR</span>
+          <div class="card-title">INFECTION</div>
+        </div>
+
+        <div class="game-card card-parkour" onclick="launchGame('PARKOUR')">
+          <div class="card-title">PARKOUR</div>
+        </div>
+
+        <div class="game-card card-creative" onclick="launchGame('CREATIVE')">
+          <div class="card-title">CREATIVE</div>
+        </div>
+
+        <div class="game-card card-hideandseek" onclick="launchGame('HIDE AND SEEK')">
+          <div class="card-title">HIDE AND SEEK</div>
+        </div>
+
+        <div class="game-card card-thewar" onclick="launchGame('THE WAR')">
+          <div class="card-title">THE WAR</div>
+        </div>
+
+        <div class="game-card card-skywars" onclick="launchGame('SKY WARS')">
+          <div class="card-title">SKY WARS</div>
+        </div>
+
+        <div class="game-card card-oneblock" onclick="launchGame('ONE BLOCK')">
+          <div class="card-title">ONE BLOCK</div>
+        </div>
+
+        <div class="game-card card-bedwars" onclick="launchGame('BED WARS')">
+          <div class="card-title">BED WARS</div>
+        </div>
+
+        <div class="game-card card-sandbox" onclick="launchGame('SANDBOX')">
+          <div class="card-title">SANDBOX</div>
+        </div>
+
+        <div class="game-card card-raid" onclick="launchGame('RAID')">
+          <div class="card-title">RAID</div>
+        </div>
+
+        <div class="game-card card-stealapet updated" onclick="launchGame('STEAL A PET')">
+          <span class="badge updated-badge">UPDATED</span>
+          <div class="card-title">STEAL A PET</div>
+        </div>
+
+        <div class="game-card card-dressup" onclick="launchGame('DRESS UP')">
+          <div class="card-title">DRESS UP</div>
+        </div>
+
         <div class="custom-games-box">
           <div class="custom-title">CUSTOM GAMES</div>
           <div class="custom-icons">🎮 🎲 ⚔️</div>
         </div>
-        <div class="game-card updated"><span class="badge updated-badge">UPDATED</span><div class="card-title">GARDEN GROW</div></div>
+
+        <div class="game-card card-gardengrow updated" onclick="launchGame('GARDEN GROW')">
+          <span class="badge updated-badge">UPDATED</span>
+          <div class="card-title">GARDEN GROW</div>
+        </div>
+
         <div class="game-card coming-soon"><div class="card-title">COMING SOON</div></div>
         <div class="game-card coming-soon"><div class="card-title">COMING SOON</div></div>
       </div>
     </div>
   </div>
 
+  <!-- 2. شاشة اللعب ثلاثية الأبعاد التفاعلية -->
+  <div id="game-screen">
+    <div id="game-ui">
+      <h2 id="active-game-title" style="margin: 0; text-shadow: 2px 2px 4px #000;">BED WARS</h2>
+      <button class="exit-btn" onclick="exitGame()">🚪 العودة للقائمة</button>
+    </div>
+    <div class="game-controls-hint">التحكم: <b>WASD</b> للمشي | <b>Space</b> للقفز</div>
+    <div id="game-canvas-container" style="width: 100%; height: 100%;"></div>
+  </div>
+
   <script>
+    // --- 1. إعداد لوبي العرض لـ 3D ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
@@ -78,110 +225,166 @@
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
 
     const islandGroup = new THREE.Group();
     const grassGeo = new THREE.CylinderGeometry(3, 2.5, 0.8, 8);
-    const grassMat = new THREE.MeshBasicMaterial({ color: 0x557a2b });
+    const grassMat = new THREE.MeshLambertMaterial({ color: 0x557a2b });
     islandGroup.add(new THREE.Mesh(grassGeo, grassMat));
 
     const dirtGeo = new THREE.CylinderGeometry(2.5, 0.5, 2.5, 8);
-    const dirtMat = new THREE.MeshBasicMaterial({ color: 0x8b5a2b });
+    const dirtMat = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
     const dirt = new THREE.Mesh(dirtGeo, dirtMat);
     dirt.position.y = -1.55;
     islandGroup.add(dirt);
 
-    // دالة إنشاء مكعب مع ضبط الـ UV لتوزيع التكستشر بشكل صحيح
-    function createBox(w, h, d, u, v, texture, texW = 64, texH = 64) {
-      const geo = new THREE.BoxGeometry(w, h, d);
-      const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const skinMaterial = new THREE.MeshLambertMaterial({ color: 0xc68b59 });
+    const shirtMaterial = new THREE.MeshLambertMaterial({ color: 0x00a8a8 });
+    const pantsMaterial = new THREE.MeshLambertMaterial({ color: 0x000080 });
 
-      const uvs = [];
-      const faces = [
-        [u + d + w, v + d, u + d + w + d, v + d + h], // Right
-        [u, v + d, u + d, v + d + h],                 // Left
-        [u + d, v, u + d + w, v + d],                 // Top
-        [u + d + w, v, u + d + w + w, v + d],         // Bottom
-        [u + d, v + d, u + d + w, v + d + h],         // Front
-        [u + d + w + d, v + d, u + 2*d + 2*w, v + d + h] // Back
-      ];
+    const playerGroup = new THREE.Group();
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), skinMaterial);
+    head.position.y = 1.8;
+    playerGroup.add(head);
 
-      for (let i = 0; i < 6; i++) {
-        const [x1, y1, x2, y2] = faces[i];
-        uvs.push(
-          x1/texW, 1 - y2/texH,
-          x2/texW, 1 - y2/texH,
-          x1/texW, 1 - y1/texH,
-          x2/texW, 1 - y1/texH
-        );
-      }
-      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-      return new THREE.Mesh(geo, mat);
-    }
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.4), shirtMaterial);
+    body.position.y = 0.8;
+    playerGroup.add(body);
 
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.setCrossOrigin('anonymous');
+    const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.2, 0.4), shirtMaterial);
+    leftArm.position.set(-0.6, 0.8, 0);
+    playerGroup.add(leftArm);
 
-    // رابط سكن Steve المباشر كصورة Canvas خفيفة وقابلة للتحميل بدون مشاكل
-    const skinUrl = 'https://mc-heads.net/skin/MHF_Steve';
+    const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.2, 0.4), shirtMaterial);
+    rightArm.position.set(0.6, 0.8, 0);
+    playerGroup.add(rightArm);
 
-    textureLoader.load(skinUrl, (texture) => {
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.NearestFilter;
+    const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.2, 0.4), pantsMaterial);
+    leftLeg.position.set(-0.2, -0.4, 0);
+    playerGroup.add(leftLeg);
 
-      const playerGroup = new THREE.Group();
+    const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.2, 0.4), pantsMaterial);
+    rightLeg.position.set(0.2, -0.4, 0);
+    playerGroup.add(rightLeg);
 
-      // Head
-      const head = createBox(0.8, 0.8, 0.8, 8, 8, texture);
-      head.position.y = 1.8;
-      playerGroup.add(head);
-
-      // Body
-      const body = createBox(0.8, 1.2, 0.4, 20, 20, texture);
-      body.position.y = 0.8;
-      playerGroup.add(body);
-
-      // Left Arm
-      const leftArm = createBox(0.4, 1.2, 0.4, 44, 20, texture);
-      leftArm.position.set(-0.6, 0.8, 0);
-      playerGroup.add(leftArm);
-
-      // Right Arm
-      const rightArm = createBox(0.4, 1.2, 0.4, 44, 20, texture);
-      rightArm.position.set(0.6, 0.8, 0);
-      playerGroup.add(rightArm);
-
-      // Left Leg
-      const leftLeg = createBox(0.4, 1.2, 0.4, 4, 20, texture);
-      leftLeg.position.set(-0.2, -0.4, 0);
-      playerGroup.add(leftLeg);
-
-      // Right Leg
-      const rightLeg = createBox(0.4, 1.2, 0.4, 4, 20, texture);
-      rightLeg.position.set(0.2, -0.4, 0);
-      playerGroup.add(rightLeg);
-
-      islandGroup.add(playerGroup);
-    });
-
+    islandGroup.add(playerGroup);
     scene.add(islandGroup);
 
-    camera.position.set(0, 2, 6);
+    camera.position.set(0, 2.2, 6.5);
     camera.lookAt(0, 0.5, 0);
 
-    function animate() {
-      requestAnimationFrame(animate);
+    function animateLobby() {
+      requestAnimationFrame(animateLobby);
       islandGroup.rotation.y += 0.005;
       renderer.render(scene, camera);
     }
-    animate();
+    animateLobby();
 
-    window.addEventListener('resize', () => {
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    });
+    // --- 2. محرك اللعب التفاعلي عند الدخول لأي لعبة ---
+    let gameScene, gameCamera, gameRenderer, playablePlayer;
+    let keys = {};
+    let playerVelocityY = 0;
+    let isGrounded = true;
+    let gameAnimationId;
+
+    function launchGame(gameTitle) {
+      document.getElementById('main-header').style.display = 'none';
+      document.getElementById('main-container').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'block';
+      document.getElementById('active-game-title').innerText = "MODE: " + gameTitle;
+
+      initGameWorld();
+    }
+
+    function exitGame() {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('main-header').style.display = 'flex';
+      document.getElementById('main-container').style.display = 'flex';
+      
+      if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+      const gContainer = document.getElementById('game-canvas-container');
+      gContainer.innerHTML = '';
+    }
+
+    function initGameWorld() {
+      const gContainer = document.getElementById('game-canvas-container');
+      gContainer.innerHTML = '';
+
+      gameScene = new THREE.Scene();
+      gameScene.background = new THREE.Color(0x70a1ff);
+
+      gameCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      gameRenderer = new THREE.WebGLRenderer({ antialias: true });
+      gameRenderer.setSize(window.innerWidth, window.innerHeight);
+      gContainer.appendChild(gameRenderer.domElement);
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(20, 40, 20);
+      gameScene.add(light);
+      gameScene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+      // أرضية العالم المقسمة لمكعبات
+      const floorGeo = new THREE.BoxGeometry(40, 1, 40);
+      const floorMat = new THREE.MeshLambertMaterial({ color: 0x2ed573 });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.position.y = -0.5;
+      gameScene.add(floor);
+
+      // بلكات باركور عشوائية للعب
+      for(let i=0; i<15; i++) {
+        const boxGeo = new THREE.BoxGeometry(2, 2, 2);
+        const boxMat = new THREE.MeshLambertMaterial({ color: 0xff4757 });
+        const box = new THREE.Mesh(boxGeo, boxMat);
+        box.position.set((Math.random()-0.5)*30, 1, (Math.random()-0.5)*30);
+        gameScene.add(box);
+      }
+
+      // لاعب ثلاثي الأبعاد قابل للتحريك
+      playablePlayer = playerGroup.clone();
+      playablePlayer.position.set(0, 1, 0);
+      gameScene.add(playablePlayer);
+
+      window.addEventListener('keydown', (e) => keys[e.code] = true);
+      window.addEventListener('keyup', (e) => keys[e.code] = false);
+
+      animateGame();
+    }
+
+    function animateGame() {
+      gameAnimationId = requestAnimationFrame(animateGame);
+
+      const speed = 0.15;
+      if (keys['KeyW'] || keys['ArrowUp']) playablePlayer.position.z -= speed;
+      if (keys['KeyS'] || keys['ArrowDown']) playablePlayer.position.z += speed;
+      if (keys['KeyA'] || keys['ArrowLeft']) playablePlayer.position.x -= speed;
+      if (keys['KeyD'] || keys['ArrowRight']) playablePlayer.position.x += speed;
+
+      // فيزياء القفز
+      if (keys['Space'] && isGrounded) {
+        playerVelocityY = 0.25;
+        isGrounded = false;
+      }
+
+      playablePlayer.position.y += playerVelocityY;
+
+      if (playablePlayer.position.y > 0) {
+        playerVelocityY -= 0.012; // جاذبية
+      } else {
+        playablePlayer.position.y = 0;
+        playerVelocityY = 0;
+        isGrounded = true;
+      }
+
+      // الكاميرا تتبع اللاعب
+      gameCamera.position.set(playablePlayer.position.x, playablePlayer.position.y + 4, playablePlayer.position.z + 8);
+      gameCamera.lookAt(playablePlayer.position.x, playablePlayer.position.y + 1, playablePlayer.position.z);
+
+      gameRenderer.render(gameScene, gameCamera);
+    }
   </script>
 </body>
 </html>
