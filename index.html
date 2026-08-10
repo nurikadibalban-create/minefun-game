@@ -3,152 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineFun.io Clone</title>
+    <title>MineFun.io - Play Free Online Games</title>
+    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial Black', Gadget, sans-serif;
+            font-family: 'Arial Black', Impact, sans-serif;
             user-select: none;
         }
 
         body {
-            background-color: #0b1522;
-            color: white;
+            background-color: #177a9e;
             overflow: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
-        /* 3D Canvas Background */
-        #bg-canvas {
-            position: fixed;
+        /* 3D Background Canvas */
+        #canvas-3d {
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: 1;
         }
 
-        /* UI Layer Overlay */
-        .ui-container {
-            position: relative;
+        /* Full Overlay UI Container */
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 10;
+            pointer-events: none;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            pointer-events: none;
+            justify-content: space-between;
         }
 
         .interactive {
             pointer-events: auto;
         }
 
-        /* Header Bar */
-        header {
+        /* Top Header UI */
+        .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+            align-items: flex-start;
+            padding: 12px 20px;
         }
 
-        .user-profile {
+        /* Profile Widget (Top-Left) */
+        .profile-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .user-tag {
+            background: #000;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid #333;
+        }
+
+        .friends-btn {
+            background: #324b6f;
+            color: #fff;
+            border: 2px solid #5275a1;
+            border-bottom: 4px solid #1a2a40;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Header Right Controls */
+        .header-right {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 2px solid #2a3546;
-            font-size: 14px;
         }
 
         .logo {
-            font-size: 32px;
-            font-weight: 900;
+            font-size: 38px;
             color: #ffffff;
-            text-shadow: 3px 3px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
-            letter-spacing: 1px;
+            text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000;
+            letter-spacing: 0px;
+            margin-right: 15px;
         }
 
         .logo span {
             color: #00d2ff;
         }
 
-        .top-right-menu {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-top {
-            background: #2b3040;
+        .nav-btn {
+            background: #232733;
             color: #fff;
-            border: 2px solid #454d66;
-            border-bottom: 4px solid #181b24;
-            padding: 8px 14px;
+            border: 2px solid #3d4357;
+            border-bottom: 4px solid #12141c;
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 900;
             cursor: pointer;
-            font-weight: bold;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: 0.1s;
         }
 
-        .btn-top:hover {
-            background: #3b4259;
-            transform: translateY(-2px);
+        .nav-btn:hover {
+            background: #313747;
         }
 
-        /* Main Games Grid Menu */
-        .main-content {
+        .btn-shop { background: #2f364a; }
+        .btn-pets { background: #2f364a; }
+
+        /* Main Center Layout */
+        .main-body {
             display: flex;
             justify-content: flex-end;
-            padding: 10px 40px;
-            flex: 1;
+            padding: 0 20px 20px 0;
+            height: calc(100vh - 80px);
         }
 
+        /* Games Grid Panel */
         .games-panel {
-            width: 620px;
-            background: rgba(20, 30, 48, 0.85);
-            backdrop-filter: blur(6px);
+            width: 680px;
+            background: rgba(18, 30, 49, 0.92);
             border-radius: 16px;
             padding: 16px;
-            border: 3px solid #2c394e;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border: 4px solid #283a54;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: calc(100vh - 100px);
             overflow-y: auto;
+            max-height: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .games-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .game-card {
             position: relative;
-            background: #1b2230;
-            border-radius: 10px;
+            background: #1c2838;
+            border-radius: 8px;
             aspect-ratio: 1 / 1;
             cursor: pointer;
-            border: 2px solid #2e394e;
-            border-bottom: 4px solid #111622;
+            border: 2px solid #324663;
+            border-bottom: 4px solid #0f1724;
             overflow: hidden;
-            transition: transform 0.15s, border-color 0.15s;
+            transition: transform 0.1s;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
         }
 
         .game-card:hover {
-            transform: scale(1.05);
+            transform: scale(1.04);
             border-color: #00d2ff;
         }
 
@@ -164,16 +192,17 @@
         .game-title {
             position: relative;
             z-index: 2;
-            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-            padding: 6px 2px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%);
+            padding: 6px 2px 3px 2px;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
+            color: #fff;
             text-transform: uppercase;
             font-weight: 900;
-            text-shadow: 1px 1px 2px #000;
+            text-shadow: 1px 1px 0 #000;
         }
 
-        .tag-popular {
+        .badge {
             position: absolute;
             top: 4px;
             left: 4px;
@@ -181,199 +210,253 @@
             color: #000;
             font-size: 8px;
             padding: 2px 4px;
-            border-radius: 4px;
+            border-radius: 3px;
             font-weight: 900;
             z-index: 3;
         }
 
-        /* Custom Games Banner */
-        .custom-games-banner {
-            grid-column: span 3;
-            background: linear-gradient(90deg, #1d2636, #2d3b54);
-            border-radius: 10px;
-            border: 2px solid #00d2ff;
+        .badge-updated {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        /* Custom Games Section Banner */
+        .custom-games-row {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 15px;
+            gap: 8px;
+            background: #162233;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #2d415e;
+        }
+
+        .custom-label {
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            font-size: 10px;
+            font-weight: 900;
+            color: #8fa3c4;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .custom-item {
+            flex: 1;
+            height: 60px;
+            background: #23344d;
+            border-radius: 6px;
+            border: 2px solid #374e70;
             cursor: pointer;
+            overflow: hidden;
+            position: relative;
         }
 
-        .custom-games-banner:hover {
-            filter: brightness(1.15);
+        .custom-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        /* Scrollbar styling */
+        /* Custom Scrollbar */
         .games-panel::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         .games-panel::-webkit-scrollbar-thumb {
-            background: #2e394e;
-            border-radius: 10px;
+            background: #2b3d57;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- 3D Scene Background -->
-    <canvas id="bg-canvas"></canvas>
+    <!-- 3D Canvas Background (Islands & Player) -->
+    <canvas id="canvas-3d"></canvas>
 
     <!-- Overlay UI -->
-    <div class="ui-container">
-        <header class="interactive">
-            <div class="user-profile">
-                <span style="color:#00ff88;">●</span> NURIPLAYZ
+    <div class="ui-overlay">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="profile-box interactive">
+                <div class="user-tag">
+                    <span style="color:#00ff88; font-size:10px;">🟢</span>
+                    NURIPLAYZ
+                </div>
+                <button class="friends-btn">👥 FRIENDS</button>
             </div>
 
-            <div class="logo">Mine<span>Fun</span>.io</div>
-
-            <div class="top-right-menu">
-                <button class="btn-top">🛒 SHOP</button>
-                <button class="btn-top">🐾 PETS</button>
-                <button class="btn-top">⚙️</button>
+            <div class="header-right interactive">
+                <div class="logo">Mine<span>Fun</span>.io</div>
+                <button class="nav-btn btn-shop">🛒 SHOP</button>
+                <button class="nav-btn btn-pets">🐾 PETS</button>
+                <button class="nav-btn">⚙️</button>
             </div>
-        </header>
+        </div>
 
-        <div class="main-content">
+        <!-- Main Body -->
+        <div class="main-body">
             <div class="games-panel interactive">
+                
+                <!-- Main Grid -->
                 <div class="games-grid">
                     
-                    <!-- Popular Modes -->
                     <div class="game-card">
-                        <span class="tag-popular">POPULAR</span>
-                        <img src="https://via.placeholder.com/150/228B22/FFFFFF?text=INFECTION" alt="Infection">
+                        <span class="badge">POPULAR</span>
+                        <img src="https://picsum.photos/id/1062/150/150" alt="Infection">
                         <div class="game-title">INFECTION</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/4169E1/FFFFFF?text=PARKOUR" alt="Parkour">
+                        <img src="https://picsum.photos/id/1015/150/150" alt="Parkour">
                         <div class="game-title">PARKOUR</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/FF8C00/FFFFFF?text=CREATIVE" alt="Creative">
+                        <img src="https://picsum.photos/id/1018/150/150" alt="Creative">
                         <div class="game-title">CREATIVE</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/8A2BE2/FFFFFF?text=HIDE+SEEK" alt="Hide and Seek">
+                        <img src="https://picsum.photos/id/1025/150/150" alt="Hide and Seek">
                         <div class="game-title">HIDE AND SEEK</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/B22222/FFFFFF?text=THE+WAR" alt="The War">
+                        <img src="https://picsum.photos/id/1043/150/150" alt="The War">
                         <div class="game-title">THE WAR</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/00FFFF/FFFFFF?text=SKY+WARS" alt="Sky Wars">
+                        <img src="https://picsum.photos/id/1050/150/150" alt="Sky Wars">
                         <div class="game-title">SKY WARS</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/FFD700/FFFFFF?text=ONE+BLOCK" alt="One Block">
+                        <img src="https://picsum.photos/id/1058/150/150" alt="One Block">
                         <div class="game-title">ONE BLOCK</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/DC143C/FFFFFF?text=BED+WARS" alt="Bed Wars">
+                        <img src="https://picsum.photos/id/1069/150/150" alt="Bed Wars">
                         <div class="game-title">BED WARS</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/32CD32/FFFFFF?text=SANDBOX" alt="Sandbox">
+                        <img src="https://picsum.photos/id/1080/150/150" alt="Sandbox">
                         <div class="game-title">SANDBOX</div>
                     </div>
 
                     <div class="game-card">
-                        <img src="https://via.placeholder.com/150/FF1493/FFFFFF?text=RAID" alt="Raid">
+                        <img src="https://picsum.photos/id/1084/150/150" alt="Raid">
                         <div class="game-title">RAID</div>
                     </div>
 
+                    <div class="game-card">
+                        <span class="badge badge-updated">UPDATED</span>
+                        <img src="https://picsum.photos/id/1074/150/150" alt="Steal a Pet">
+                        <div class="game-title">STEAL A PET</div>
+                    </div>
+
+                    <div class="game-card">
+                        <img src="https://picsum.photos/id/1027/150/150" alt="Dress Up">
+                        <div class="game-title">DRESS UP</div>
+                    </div>
+
                 </div>
 
-                <!-- Custom Games Section Banner -->
-                <div class="custom-games-banner">
-                    <div>
-                        <div style="font-size: 14px; color: #00d2ff; font-weight: 900;">CUSTOM GAMES</div>
-                        <div style="font-size: 10px; color: #aaa;">Play community created maps</div>
-                    </div>
-                    <button class="btn-top" style="background: #00d2ff; color: #000; border: none;">BROWSE</button>
+                <!-- Custom Games Banner -->
+                <div class="custom-games-row">
+                    <div class="custom-label">CUSTOM GAMES</div>
+                    <div class="custom-item"><img src="https://picsum.photos/id/237/100/60" alt="Map"></div>
+                    <div class="custom-item"><img src="https://picsum.photos/id/238/100/60" alt="Map"></div>
+                    <div class="custom-item"><img src="https://picsum.photos/id/239/100/60" alt="Map"></div>
+                    <div class="custom-item"><img src="https://picsum.photos/id/240/100/60" alt="Map"></div>
                 </div>
+
             </div>
         </div>
+
     </div>
 
-    <!-- 3D World Script -->
+    <!-- 3D Scene Script -->
     <script>
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x5cb8ff); // Sky blue
+        scene.background = new THREE.Color(0x43a8dc); // Sky Color
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-3d'), antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(20, 40, 20);
-        scene.add(dirLight);
+        const sunLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        sunLight.position.set(10, 20, 10);
+        scene.add(sunLight);
 
-        // Island / Floating Island Platform
+        // Floating Island (Left Side)
         const islandGroup = new THREE.Group();
-
-        // Grass Top Blocks
+        
         const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-        const grassMat = new THREE.MeshLambertMaterial({ color: 0x55ac26 });
-        const dirtMat = new THREE.MeshLambertMaterial({ color: 0x8b5a2b });
+        const grassMat = new THREE.MeshLambertMaterial({ color: 0x5ebd3e });
+        const dirtMat = new THREE.MeshLambertMaterial({ color: 0xa86f38 });
 
-        for (let x = -4; x <= 4; x++) {
-            for (let z = -4; z <= 4; z++) {
-                // Grass Layer
+        // Build Voxel Island
+        for (let x = -3; x <= 3; x++) {
+            for (let z = -3; z <= 3; z++) {
+                // Grass Top
                 const grass = new THREE.Mesh(boxGeo, grassMat);
                 grass.position.set(x, 0, z);
                 islandGroup.add(grass);
 
-                // Dirt Layer
-                const dirt = new THREE.Mesh(boxGeo, dirtMat);
-                dirt.position.set(x, -1, z);
-                islandGroup.add(dirt);
+                // Dirt Bottom
+                for(let y = 1; y <= 3; y++) {
+                    const dirt = new THREE.Mesh(boxGeo, dirtMat);
+                    dirt.position.set(x, -y, z);
+                    islandGroup.add(dirt);
+                }
             }
         }
 
-        // Simple Character Model (Steve style)
-        const charGroup = new THREE.Group();
-        const bodyMat = new THREE.MeshLambertMaterial({ color: 0x00a8ff }); // Blue shirt
-        const headMat = new THREE.MeshLambertMaterial({ color: 0xffcc99 }); // Skin tone
+        // Minecraft Player Model Placeholder
+        const playerGroup = new THREE.Group();
+        const headMat = new THREE.MeshLambertMaterial({ color: 0xffcc99 });
+        const shirtMat = new THREE.MeshLambertMaterial({ color: 0x2e86de });
+        const pantsMat = new THREE.MeshLambertMaterial({ color: 0x1b1464 });
 
         const head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), headMat);
-        head.position.y = 1.4;
+        head.position.y = 1.6;
         
-        const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1, 0.4), bodyMat);
-        body.position.y = 0.5;
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1, 0.4), shirtMat);
+        body.position.y = 0.7;
 
-        charGroup.add(head);
-        charGroup.add(body);
-        charGroup.position.set(-1.5, 0.5, 0);
+        const legs = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1, 0.4), pantsMat);
+        legs.position.y = -0.3;
 
+        playerGroup.add(head);
+        playerGroup.add(body);
+        playerGroup.add(legs);
+        playerGroup.position.set(0, 1, 0);
+
+        islandGroup.add(playerGroup);
         scene.add(islandGroup);
-        scene.add(charGroup);
 
-        // Camera setup overlooking the island from left
-        camera.position.set(-5, 3, 6);
+        // Position Island on Left Side
+        islandGroup.position.set(-4, 0, -2);
+        islandGroup.rotation.y = 0.6;
+
+        camera.position.set(0, 2, 8);
         camera.lookAt(0, 0, 0);
 
-        // Animation Loop (Slow rotation for dynamic background)
+        // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
-            islandGroup.rotation.y += 0.002;
-            charGroup.rotation.y += 0.002;
+            islandGroup.rotation.y += 0.003; // Idle Island Rotation
             renderer.render(scene, camera);
         }
         animate();
 
-        // Responsive Resize
+        // Window Resize Listener
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
