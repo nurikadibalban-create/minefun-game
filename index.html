@@ -252,9 +252,13 @@
     </div>
 
     <script>
-        // --- Redirection Function ---
+        // فتح اللعبة في تبويب جديد لتجنب منع حماية المتصفح (Iframe Protection)
         function openGame(mode) {
-            window.location.href = "https://minefun.io";
+            if (mode) {
+                window.open('https://minefun.io/' + mode, '_blank');
+            } else {
+                window.open('https://minefun.io', '_blank');
+            }
         }
 
         // --- THREE.JS ENGINE ---
