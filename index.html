@@ -1,66 +1,242 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineFun Game</title>
+    <title>MineFun UI Clone</title>
     <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #1a1c23;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Top Navigation Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252836;
+            padding: 10px 20px;
+            border-bottom: 3px solid #3b3e51;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 2px 2px #000;
+        }
+
+        .nav-buttons button {
+            background-color: #4e5473;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 0 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .nav-buttons button:hover, .nav-buttons button.active {
+            background-color: #ff9d00;
+            color: #000;
+        }
+
+        /* Main Game Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        /* Left Side: Character Preview */
+        .character-view {
+            flex: 1;
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .player-card {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .avatar-placeholder {
+            width: 180px;
+            height: 280px;
+            background-color: #d1a153;
+            border: 4px solid #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Right Side: Dynamic Content Panel */
+        .panel-view {
+            flex: 2;
+            background-color: #1f222e;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Grid Layouts for Cards */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .card {
+            background-color: #2c3040;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #ff9d00;
+            transform: translateY(-3px);
+        }
+
+        .card-icon {
+            width: 100%;
+            height: 90px;
+            background-color: #3f4458;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .price {
+            color: #ffcc00;
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
-    <!-- استدعاء مكتبة Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+
+    <header>
+        <div class="logo">MINEFUN.IO</div>
+        <div class="nav-buttons">
+            <button onclick="switchTab('lobby')" class="active">اللوبي (Lobby)</button>
+            <button onclick="switchTab('custom')">ألعاب مخصصة (Custom Games)</button>
+            <button onclick="switchTab('shop')">المتجر (Shop)</button>
+            <button onclick="switchTab('pets')">الحيوانات (Pets)</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Character / Avatar Display -->
+        <div class="character-view">
+            <div class="player-card">اللاعب: NURIPLAYZ</div>
+            <div class="avatar-placeholder">🧍 Minecraft Model</div>
+        </div>
+
+        <!-- Dynamic Panel Content -->
+        <div class="panel-view">
+            
+            <!-- 1. LOBBY SECTION -->
+            <div id="lobby" class="view-section active">
+                <h2>أنماط اللعب الشائعة</h2>
+                <div class="grid-container">
+                    <div class="card"><div class="card-icon">🧟</div>Infection</div>
+                    <div class="card"><div class="card-icon">🏃</div>Parkour</div>
+                    <div class="card"><div class="card-icon">🧱</div>Creative</div>
+                    <div class="card"><div class="card-icon">🙈</div>Hide & Seek</div>
+                    <div class="card"><div class="card-icon">⚔️</div>Bed Wars</div>
+                    <div class="card"><div class="card-icon">🌌</div>Sky Wars</div>
+                </div>
+            </div>
+
+            <!-- 2. CUSTOM GAMES SECTION -->
+            <div id="custom" class="view-section">
+                <h2>الغرف المخصصة (Custom Games)</h2>
+                <div class="grid-container">
+                    <div class="card"><div class="card-icon">🦑</div>Squid Games</div>
+                    <div class="card"><div class="card-icon">🧱</div>Lucky Block</div>
+                    <div class="card"><div class="card-icon">🏨</div>The Hotel</div>
+                    <div class="card"><div class="card-icon">🎨</div>Color Drop</div>
+                </div>
+            </div>
+
+            <!-- 3. SHOP SECTION -->
+            <div id="shop" class="view-section">
+                <h2>متجر الملابس والإكسسوارات</h2>
+                <div class="grid-container">
+                    <div class="card"><div class="card-icon">🕶️</div>نظارة شمسية<div class="price">80 🪙</div></div>
+                    <div class="card"><div class="card-icon">🎀</div>فيونكة شعر<div class="price">150 🪙</div></div>
+                    <div class="card"><div class="card-icon">👕</div>قميص زرقاء<div class="price">100 🪙</div></div>
+                    <div class="card"><div class="card-icon">👟</div>حذاء رياضي<div class="price">350 🪙</div></div>
+                </div>
+            </div>
+
+            <!-- 4. PETS SECTION -->
+            <div id="pets" class="view-section">
+                <h2>متجر البيوض والحيوانات</h2>
+                <div class="grid-container">
+                    <div class="card"><div class="card-icon">🥚</div>بيضة عادية<div class="price">100 🪙</div></div>
+                    <div class="card"><div class="card-icon">🐉</div>التنين الأسود<div class="price">★ ★ ★ ★</div></div>
+                    <div class="card"><div class="card-icon">🐝</div>الملكة النحلة<div class="price">★ ★ ★ ★</div></div>
+                    <div class="card"><div class="card-icon">🦄</div>وحيد القرن<div class="price">★ ★ ★ ★</div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <script>
-        // إعداد المشهد والكاميرا
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87ceeb);
+        function switchTab(tabId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.view-section');
+            sections.forEach(section => section.classList.remove('active'));
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+            // Deactivate all buttons
+            const buttons = document.querySelectorAll('.nav-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
 
-        // إضاءة المشهد
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 10, 7.5);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0x404040));
-
-        // بناء الأرضية من الكتل
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-
-        for (let x = -5; x <= 5; x++) {
-            for (let z = -5; z <= 5; z++) {
-                const block = new THREE.Mesh(geometry, material);
-                block.position.set(x, 0, z);
-                scene.add(block);
-            }
+            // Show current section and active button
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
-
-        camera.position.set(0, 2, 5);
-
-        // التحكم بالحركة (WASD)
-        const keys = {};
-        document.addEventListener('keydown', (e) => keys[e.code] = true);
-        document.addEventListener('keyup', (e) => keys[e.code] = false);
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const speed = 0.1;
-
-            if (keys['KeyW']) camera.translateZ(-speed);
-            if (keys['KeyS']) camera.translateZ(speed);
-            if (keys['KeyA']) camera.translateX(-speed);
-            if (keys['KeyD']) camera.translateX(speed);
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
     </script>
 </body>
 </html>
-
