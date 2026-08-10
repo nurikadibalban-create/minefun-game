@@ -67,3 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+// فتح اللعبة في تبويب جديد لمنع ظهور الشاشة البيضاء
+function openGame(mode) {
+    if (mode) {
+        window.open('https://minefun.io/' + mode, '_blank');
+    } else {
+        window.open('https://minefun.io', '_blank');
+    }
+}
