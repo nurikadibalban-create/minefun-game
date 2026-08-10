@@ -1,48 +1,69 @@
-// إعداد المشهد والكاميرا
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87ceeb); // لون السماء
+// ==========================================
+// 1. التبديل بين الشاشات (Navigation Logic)
+// ==========================================
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+/**
+ * دالة للتبديل بين التبويبات (اللوبي، الألعاب المخصصة، المتجر، الحيوانات)
+ * @param {string} tabId - معرف القسم المراد عرضه
+ * @param {HTMLElement} clickedButton - زر الملاحة الذي تم الضغط عليه
+ */
+function switchTab(tabId, clickedButton) {
+    // إخفاء جميع الأقسام
+    const sections = document.querySelectorAll('.view-section');
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
 
-// إضاءة المشهد
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 10, 7.5);
-scene.add(light);
-scene.add(new THREE.AmbientLight(0x404040));
+    // إلغاء تفعيل جميع أزرار الملاحة
+    const buttons = document.querySelectorAll('.nav-buttons button');
+    buttons.forEach(button => {
+        button.classList.remove('active');
+    });
 
-// إنشاء مكعب أرضي (Block)
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshLambertMaterial({ color: 0x55aa55 });
+    // إظهار القسم المطلوب
+    const targetSection = document.getElementById(tabId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
 
-for (let x = -5; x <= 5; x++) {
-  for (let z = -5; z <= 5; z++) {
-    const block = new THREE.Mesh(geometry, material);
-    block.position.set(x, 0, z);
-    scene.add(block);
-  }
+    // تفعيل الزر المضغوط
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
 }
 
-camera.position.set(0, 2, 5);
+// ==========================================
+// 2. الأحداث والتفاعلات (Event Listeners)
+// ==========================================
 
-// التحكم بالحركة (WASD)
-const keys = {};
-document.addEventListener('keydown', (e) => keys[e.code] = true);
-document.addEventListener('keyup', (e) => keys[e.code] = false);
+document.addEventListener('DOMContentLoaded', () => {
 
-function animate() {
-  requestAnimationFrame(animate);
+    // التفاعل مع بطاقات الألعاب والمتجر عند الضغط عليها
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // جلب اسم العنصر أو اللعبة من داخل البطاقة
+            const title = card.childNodes[0].textContent.trim() || card.innerText.split('\n')[0];
+            
+            // تحقق من القسم الحالي لمعرفة نوع البطاقة المضغوطة
+            const activeSection = document.querySelector('.view-section.active');
+            
+            if (activeSection) {
+                const sectionId = activeSection.id;
 
-  const speed = 0.1;
-  if (keys['KeyW']) camera.translateZ(-speed);
-  if (keys['KeyS']) camera.translateZ(speed);
-  if (keys['KeyA']) camera.translateX(-speed);
-  if (keys['KeyD']) camera.translateX(speed);
+                if (sectionId === 'lobby' || sectionId === 'custom') {
+                    console.log(`جارٍ دخول اللعبة: ${title}`);
+                    alert(`🎮 جاري الاتصال بغرفة: ${title}`);
+                } else if (sectionId === 'shop') {
+                    console.log(`شراء عنصر من المتجر: ${title}`);
+                    alert(`🛒 هل ترغب في شراء: ${title}؟`);
+                } else if (sectionId === 'pets') {
+                    console.log(`فتح بيضة أو حيوان: ${title}`);
+                    alert(`🐾 تم اختيار: ${title}`);
+                }
+            }
+        });
+    });
 
-  renderer.render(scene, camera);
-}
-
-animate();
-  
+});
