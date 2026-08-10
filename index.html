@@ -152,20 +152,16 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            transition: transform 0.1s, border-color 0.1s;
         }
 
         .game-card:hover {
-            transform: scale(1.04);
+            transform: scale(1.05);
             border-color: #00d2ff;
         }
 
-        .game-card img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .game-card:active {
+            transform: scale(0.98);
         }
 
         .game-title {
@@ -210,8 +206,8 @@
 
             <div class="header-right interactive">
                 <div class="logo">Mine<span>Fun</span>.io</div>
-                <button class="nav-btn">🛒 SHOP</button>
-                <button class="nav-btn">🐾 PETS</button>
+                <button class="nav-btn" onclick="openGame()">🛒 SHOP</button>
+                <button class="nav-btn" onclick="openGame()">🐾 PETS</button>
                 <button class="nav-btn">⚙️</button>
             </div>
         </div>
@@ -219,36 +215,35 @@
         <div class="main-body">
             <div class="games-panel interactive">
                 <div class="games-grid">
-                    <!-- Cards with CSS Gradients replacing missing images -->
-                    <div class="game-card" style="background: linear-gradient(135deg, #1b4d3e, #2e8b57);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #1b4d3e, #2e8b57);" onclick="openGame('infection')">
                         <span class="badge">POPULAR</span>
                         <div class="game-title">INFECTION</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #2b580c, #639a67);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #2b580c, #639a67);" onclick="openGame('parkour')">
                         <div class="game-title">PARKOUR</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #d35400, #e67e22);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #d35400, #e67e22);" onclick="openGame('creative')">
                         <div class="game-title">CREATIVE</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #2980b9, #3498db);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #2980b9, #3498db);" onclick="openGame('hide-and-seek')">
                         <div class="game-title">HIDE AND SEEK</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);" onclick="openGame('the-war')">
                         <div class="game-title">THE WAR</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #16a085, #1abc9c);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #16a085, #1abc9c);" onclick="openGame('sky-wars')">
                         <div class="game-title">SKY WARS</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #f39c12, #f1c40f);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #f39c12, #f1c40f);" onclick="openGame('one-block')">
                         <div class="game-title">ONE BLOCK</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #c0392b, #e74c3c);" onclick="openGame('bed-wars')">
                         <div class="game-title">BED WARS</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71);" onclick="openGame('sandbox')">
                         <div class="game-title">SANDBOX</div>
                     </div>
-                    <div class="game-card" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">
+                    <div class="game-card" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);" onclick="openGame('raid')">
                         <div class="game-title">RAID</div>
                     </div>
                 </div>
@@ -257,7 +252,12 @@
     </div>
 
     <script>
-        // --- THREE.JS ENGINE WITH PIXEL CANVAS TEXTURES ---
+        // --- Redirection Function ---
+        function openGame(mode) {
+            window.location.href = "https://minefun.io";
+        }
+
+        // --- THREE.JS ENGINE ---
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x4ca3dd);
 
@@ -265,14 +265,12 @@
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-3d'), antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Lights
         const ambient = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambient);
         const sun = new THREE.DirectionalLight(0xffffff, 0.6);
         sun.position.set(10, 20, 10);
         scene.add(sun);
 
-        // Helper: Generate Procedural Minecraft Texture
         function createPixelTexture(color1, color2) {
             const canvas = document.createElement('canvas');
             canvas.width = 16;
@@ -300,24 +298,18 @@
         const woodMat = new THREE.MeshLambertMaterial({ map: woodTex });
 
         const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-
-        // Main Island Group
         const island = new THREE.Group();
 
-        // 1. Floor Generation
         for (let x = -4; x <= 4; x++) {
             for (let z = -4; z <= 4; z++) {
-                // Top Grass Layer
                 const grassBlock = new THREE.Mesh(boxGeo, grassMat);
                 grassBlock.position.set(x, 0, z);
                 island.add(grassBlock);
 
-                // Dirt Underneath
                 const dirtBlock = new THREE.Mesh(boxGeo, dirtMat);
                 dirtBlock.position.set(x, -1, z);
                 island.add(dirtBlock);
 
-                // Stone Base
                 if(Math.abs(x) < 3 && Math.abs(z) < 3) {
                     const stoneBlock = new THREE.Mesh(boxGeo, stoneMat);
                     stoneBlock.position.set(x, -2, z);
@@ -326,7 +318,6 @@
             }
         }
 
-        // 2. Tree
         const trunk = new THREE.Mesh(boxGeo, woodMat);
         trunk.position.set(-2, 1, -2);
         island.add(trunk);
@@ -334,7 +325,6 @@
         trunk2.position.set(-2, 2, -2);
         island.add(trunk2);
 
-        // Leaves
         for(let lx=-1; lx<=1; lx++){
             for(let lz=-1; lz<=1; lz++){
                 for(let ly=3; ly<=4; ly++){
@@ -345,7 +335,6 @@
             }
         }
 
-        // 3. Player Character
         const player = new THREE.Group();
         const skinMat = new THREE.MeshLambertMaterial({ color: 0xe0ac69 });
         const shirtMat = new THREE.MeshLambertMaterial({ color: 0x3498db });
@@ -372,12 +361,10 @@
 
         scene.add(island);
 
-        // Camera Position
         island.position.set(-3.5, 0, -1);
         camera.position.set(0, 3, 9);
         camera.lookAt(-1, 0, 0);
 
-        // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
             island.rotation.y += 0.002;
